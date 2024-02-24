@@ -1,0 +1,34 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.page-header {
+  position: relative;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 2.5rem;
+  height: $page-header-height;
+
+  @include themed() {
+    background-color: t($secondary-color);
+    color: t($primary-text);
+  }
+
+  .home-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    font-size: $text-large;
+    font-weight: bold;
+
+    .logo {
+      height: 3rem;
+      width: 4rem;
+      margin-right: 0.5rem;
+    }
+  }
+}

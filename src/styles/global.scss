@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import 'variables';
+@import 'mixins';
+
+
+html, body, #root, .app {
+  height: 100%;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  font-family: $fontFamily;
+  font-size: 1rem;
+}
+
+.theme--light .with-scrollbar {
+  @include with-scrollbar($grey-light, $white, darken($grey-light, 10%));
+}
+
+.theme--dark .with-scrollbar {
+  @include with-scrollbar($grey-dark, $grey, lighten($grey-dark, 5%));
+}
+
+.app {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: $text-huge;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: $text-large;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: $text-middle;
+  font-weight: bold;
+}
+
+hr {
+  margin: 1rem 0;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.centered-text {
+  text-align: center;
+}

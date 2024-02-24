@@ -1,0 +1,47 @@
+$fontFamily: 'Open Sans', sans-serif;
+
+// page layout
+$page-header-height: 5rem;
+$screen-side-padding-small-device: 10vw;
+$screen-side-padding-medium-device: 20vw;
+$screen-side-padding-large-device: 25vw;
+$screen-content-width-small-device: calc(100vw - 2 * #{$screen-side-padding-small-device});
+$screen-content-width-medium-device: calc(100vw - 2 * #{$screen-side-padding-medium-device});
+$screen-content-width-large-device: calc(100vw - 2 * #{$screen-side-padding-large-device});
+
+$modal-header-height: 70px;
+
+// element sizes
+$button-short-width: 4rem;
+$button-middle-width: 6rem;
+$button-long-width: 8rem;
+
+$border-radius: 0.25rem;
+
+// colors
+$white: #ffffff;
+$grey-light: #a5a6a9;
+$grey: #525256;
+$grey-dark: #36393f;
+$black: #000000;
+
+$green-light: #17b317;
+$green: #159115;
+$green-dark: #107510;
+
+$yellow: #c9c916;
+
+$orange-light: #f99c3c;
+$orange: #f57c00;
+$orange-dark: #bc6200;
+
+$red-light: #f89a9a;
+$red: #cf0e0e;
+
+$blue: #0965de;
+
+// text sizes
+$text-small: 0.75rem;
+$text-middle: 1rem;
+$text-large: 1.5rem;
+$text-huge: 2rem;
