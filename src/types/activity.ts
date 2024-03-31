@@ -29,21 +29,21 @@ export type WorkActivity = ActivityCommon<'WORK'> & {
 
 export type Activity = IdleActivity | MovementActivity | WorkActivity
 
-export const newIdleActivity = (id = ''): IdleActivity => {
+export const newIdleActivity = (): IdleActivity => {
   return {
     uuid: uuidV4(),
     type: 'IDLE',
-    id,
+    id: '',
     note: '',
     position: { x: 0, y: 0, z: 0 },
   }
 }
 
-export const newMovementActivity = (id = ''): MovementActivity => {
+export const newMovementActivity = (): MovementActivity => {
   return {
     uuid: uuidV4(),
     type: 'MOVEMENT',
-    id,
+    id: '',
     note: '',
     minDuration: 1,
     maxDuration: 5,
@@ -52,11 +52,11 @@ export const newMovementActivity = (id = ''): MovementActivity => {
   }
 }
 
-export const newWorkActivity = (id = ''): WorkActivity => {
+export const newWorkActivity = (): WorkActivity => {
   return {
     uuid: uuidV4(),
     type: 'WORK',
-    id,
+    id: '',
     note: '',
     duration: 5,
     fixedStartTime: undefined,

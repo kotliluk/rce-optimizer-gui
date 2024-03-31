@@ -8,19 +8,21 @@ export type Robot = {
   id: string,
   note: string,
   activities: Activity[],
+  duplicatedId: string,
 }
 
 export type RobotInfo = Pick<Robot, 'uuid' | 'id' | 'note'>
 
-export const newRobot = (id = ''): Robot => {
+export const newRobot = (): Robot => {
   return {
     uuid: uuidV4(),
-    id,
+    id: '',
     note: '',
     activities: [
-      newIdleActivity(`${id}_p01`),
-      newMovementActivity(`${id}_m01`),
-      newIdleActivity(`${id}_p02`),
+      newIdleActivity(),
+      newMovementActivity(),
+      newIdleActivity(),
     ],
+    duplicatedId: '',
   }
 }

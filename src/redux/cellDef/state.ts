@@ -18,7 +18,7 @@ export const initialState: State = {
     cycleTime: 10.0,
   },
   robots: [
-    newRobot('r01'),
+    newRobot(),
   ],
   timeOffsets: [],
   collisions: [],

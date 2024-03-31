@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import './RobotForm.scss'
 import { Input } from '../../atoms/input/Input'
@@ -17,6 +17,7 @@ interface RobotFormProps {
 export const RobotForm = (props: RobotFormProps): JSX.Element => {
   const { robot: { activities, ...robotInfo } } = props
   const [opened, setOpened] = useState(true)
+  const [idError, setIdError] = useState<string | undefined>(undefined)
   const dispatch = useDispatch()
 
   const handleDelete = useCallback(() => {
@@ -29,6 +30,16 @@ export const RobotForm = (props: RobotFormProps): JSX.Element => {
       ...value,
     }))
   }, [robotInfo])
+
+  useEffect(() => {
+    if (robotInfo.id === '') {
+      setIdError('Id cannot be empty')
+    } else if (robotInfo.duplicatedId !== '') {
+      setIdError('Id must be unique among all robots')
+    } else {
+      setIdError(undefined)
+    }
+  }, [robotInfo.id, robotInfo.duplicatedId, setIdError])
 
   return (
     <div className={`robot-form ${opened ? 'body-opened' : 'body-hidden'}`}>
@@ -44,6 +55,8 @@ export const RobotForm = (props: RobotFormProps): JSX.Element => {
           type='text'
           value={robotInfo.id}
           onChange={id => handleChange({ id })}
+          invalid={idError !== undefined}
+          errorMessage={idError}
         />
 
         <span>Note</span>

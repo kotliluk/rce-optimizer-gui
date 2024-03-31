@@ -18,24 +18,63 @@ export function reducer (state = initialState, action: Actions): State {
     case ADD_ROBOT:
       return {
         ...state,
-        robots: [...state.robots, newRobot(`r${String(state.robots.length + 1).padStart(2, '0')}`)],
+        robots: [...state.robots, newRobot()],
       }
 
     case DELETE_ROBOT: {
-      const robots = state.robots.filter((r) => r.uuid !== action.payload.uuid)
+      const uuid = action.payload.uuid
+      const robots = state.robots.filter((r) => r.uuid !== uuid)
+      const prevDuplicatedId = state.robots.find((r) => r.uuid === uuid)?.duplicatedId
+      // if the previous ID was duplicated, checks if it is still duplicate in other robots
+      const uuidsOfPrevDuplicatedIds = (prevDuplicatedId === '')
+        ? []
+        : robots.filter((r) => r.id === prevDuplicatedId).map((r) => r.uuid)
 
       return {
         ...state,
-        robots: robots.length === 0 ? [newRobot('r01')] : robots,
+        robots: robots.length === 0
+          ? [newRobot()]
+          : robots.map((robot) => {
+            // if there is only one other robot with the previous duplicated ID, it is not duplicated anymore
+            if (uuidsOfPrevDuplicatedIds.length === 1 && uuidsOfPrevDuplicatedIds.includes(robot.uuid)) {
+              return { ...robot, duplicatedId: '' }
+            }
+            return robot
+          }),
       }
     }
 
     case SET_ROBOT_INFO: {
       const robotInfo = action.payload.robotInfo
+      const uuid = robotInfo.uuid
+      const id = robotInfo.id
+      const prevDuplicatedId = state.robots.find((r) => r.uuid === uuid)?.duplicatedId
+      // if the ID has changed and is not empty, find other robots with the same ID
+      const uuidsOfDuplicatedIds = (id === prevDuplicatedId || id === '')
+        ? []
+        : state.robots.filter((r) => r.uuid !== uuid && r.id === id).map((r) => r.uuid)
+      // if there is another robot with the same ID, save this value as duplicated
+      const duplicatedId = (uuidsOfDuplicatedIds.length > 0) ? id : ''
+      // if the ID has changed and the previous value was duplicated, checks if it is still duplicate in other robots
+      const uuidsOfPrevDuplicatedIds = (id === prevDuplicatedId || prevDuplicatedId === '')
+        ? []
+        : state.robots.filter((r) => r.uuid !== uuid && r.id === prevDuplicatedId).map((r) => r.uuid)
 
       return {
         ...state,
-        robots: state.robots.map((r) => r.uuid === robotInfo.uuid ? { ...r, ...robotInfo } : r),
+        robots: state.robots.map((robot) => {
+          if (robot.uuid === uuid) {
+            return { ...robot, ...robotInfo, duplicatedId }
+          }
+          if (uuidsOfDuplicatedIds.includes(robot.uuid)) {
+            return { ...robot, duplicatedId }
+          }
+          // if there is only one other robot with the previous duplicated ID, it is not duplicated anymore
+          if (uuidsOfPrevDuplicatedIds.length === 1 && uuidsOfPrevDuplicatedIds.includes(robot.uuid)) {
+            return { ...robot, duplicatedId: '' }
+          }
+          return robot
+        }),
       }
     }
 
