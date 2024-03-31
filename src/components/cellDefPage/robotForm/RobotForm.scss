@@ -1,0 +1,47 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.robot-form {
+  padding: 0.5rem;
+  border-radius: $border-radius;
+
+  @include themed() {
+    border: 2px solid t($secondary-color);
+  }
+
+  .robot-form-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .robot-form-title {
+      flex-grow: 1;
+    }
+  }
+
+  &.body-hidden {
+    .delete-btn {
+      visibility: hidden;
+    }
+
+    .robot-form-body {
+      max-height: 0;
+      overflow: hidden;
+      // TODO - transition
+      transition: max-height 1s, overflow 0s;
+    }
+  }
+
+  &.body-opened {
+    .delete-btn {
+      visibility: visible;
+    }
+
+    .robot-form-body {
+      max-height: unset;
+      overflow: auto;
+      transition: max-height 1s, overflow 0s;
+    }
+  }
+}

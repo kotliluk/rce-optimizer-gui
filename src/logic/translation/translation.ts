@@ -17,5 +17,13 @@ export interface Translation {
     reset: string,
   }
   mainPage: {
+    title: string,
+    cellDefinition: {
+      link: string,
+      annotation: string,
+    },
+  }
+  cellDefPage: {
+    title: string,
   }
 }

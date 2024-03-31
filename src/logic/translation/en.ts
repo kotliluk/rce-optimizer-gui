@@ -14,5 +14,13 @@ export const EN: Translation = {
     reset: 'Reset',
   },
   mainPage: {
+    title: 'RCE Optimizer',
+    cellDefinition: {
+      link: 'New cell definition',
+      annotation: 'Description of a robotic cell, robots\' movements, and action dependencies for energy optimization.',
+    },
+  },
+  cellDefPage: {
+    title: 'New cell definition',
   },
 }

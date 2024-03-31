@@ -6,7 +6,16 @@ import { PageHeader } from './components/common/pageHeader/PageHeader'
 import { MainPage } from './pages/main/MainPage'
 import { useSelector } from './redux/useSelector'
 import { selectTheme } from './redux/page/selector'
+import { CellDefPage } from './pages/cellDef/CellDefPage'
 
+
+// TODO - unique robot ids
+// TODO - unique activity ids
+// TODO - style
+// TODO - time offsets
+// TODO - collision
+// TODO - JSON parsing
+// TODO - connect to server API
 
 const App = (): JSX.Element => {
   const theme = useSelector(selectTheme)
@@ -21,6 +30,9 @@ const App = (): JSX.Element => {
       <Switch>
         <Route path='/' exact>
           <MainPage />
+        </Route>
+        <Route path='/cell-definition'>
+          <CellDefPage />
         </Route>
         <Route path='*'>
           <Redirect to='/' />

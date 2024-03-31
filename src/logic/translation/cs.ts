@@ -14,5 +14,13 @@ export const CS: Translation = {
     reset: 'Reset',
   },
   mainPage: {
+    title: 'RCE Optimizer',
+    cellDefinition: {
+      link: 'Definice nové buňky',
+      annotation: 'Popis robotické buňky, pohybů robotů a návaznosti akcí pro optimalizaci spotřeby',
+    },
+  },
+  cellDefPage: {
+    title: 'Definice nové buňky',
   },
 }

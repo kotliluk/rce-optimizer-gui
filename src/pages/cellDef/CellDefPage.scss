@@ -1,0 +1,12 @@
+@import "src/styles/variables";
+@import "src/styles/theme";
+@import "src/styles/mixins";
+
+
+.cell-def-page {
+  @include app-screen-with-padding();
+
+  p, h1, h2 {
+    text-align: center;
+  }
+}

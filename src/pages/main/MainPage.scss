@@ -9,4 +9,24 @@
   p, h1, h2 {
     text-align: center;
   }
+
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+  }
+
+  .feature-text {
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+
+  .feature-link {
+    font-size: $text-middle;
+    font-weight: bold;
+    text-decoration: underline;
+  }
 }
