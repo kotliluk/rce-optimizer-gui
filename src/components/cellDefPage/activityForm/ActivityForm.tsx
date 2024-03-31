@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './ActivityForm.scss'
 import { Activity } from '../../../types/activity'
@@ -16,12 +16,24 @@ interface ActivityFormProps {
 
 export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
   const { activity, onChange, onDelete } = props
+  const [idError, setIdError] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (activity.id === '') {
+      setIdError('Id cannot be empty')
+    } else if (activity.duplicatedId) {
+      setIdError('Id must be unique among all actions of the robot')
+    } else {
+      setIdError(undefined)
+    }
+  }, [activity.id, activity.duplicatedId, setIdError])
 
   if (activity.type === 'IDLE') {
     return (
       <IdleActivityForm
         activity={activity}
         onChange={onChange}
+        idError={idError}
       />
     )
   }
@@ -32,6 +44,7 @@ export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
         activity={activity}
         onChange={onChange}
         onDelete={onDelete}
+        idError={idError}
       />
     )
   }
@@ -42,6 +55,7 @@ export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
         activity={activity}
         onChange={onChange}
         onDelete={onDelete}
+        idError={idError}
       />
     )
   }

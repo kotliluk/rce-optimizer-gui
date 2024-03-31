@@ -6,7 +6,7 @@ import { selectRobots } from '../../../redux/cellDef/selector'
 import { RobotForm } from './RobotForm'
 import { Button } from '../../atoms/button/Button'
 import { useDispatch } from '../../../redux/useDispatch'
-import { addRobot } from '../../../redux/cellDef/actions'
+import { addRobot, checkRobots } from '../../../redux/cellDef/actions'
 
 
 export const RobotsForm = (): JSX.Element => {
@@ -15,6 +15,10 @@ export const RobotsForm = (): JSX.Element => {
 
   const handleAddNewRobot = useCallback(() => {
     dispatch(addRobot())
+  }, [])
+
+  const handleCheckRobots = useCallback(() => {
+    dispatch(checkRobots())
   }, [])
 
   return (
@@ -28,6 +32,9 @@ export const RobotsForm = (): JSX.Element => {
       ))}
       <Button onClick={handleAddNewRobot}>
         ADD NEW
+      </Button>
+      <Button onClick={handleCheckRobots}>
+        CHECK ROBOTS
       </Button>
     </div>
   )

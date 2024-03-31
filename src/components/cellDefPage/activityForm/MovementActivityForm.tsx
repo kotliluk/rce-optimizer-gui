@@ -10,10 +10,11 @@ interface ActivityFormProps {
   activity: MovementActivity
   onChange: (activity: MovementActivity) => void
   onDelete: (activityUuid: string) => void
+  idError: string | undefined
 }
 
 export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { activity, onChange, onDelete } = props
+  const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
 
   const handleChange = useCallback((value: Partial<MovementActivity>) => {
@@ -37,6 +38,8 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
           type='text'
           value={activity.id}
           onChange={id => handleChange({ id })}
+          invalid={idError !== undefined}
+          errorMessage={idError}
         />
 
         <span>Note</span>

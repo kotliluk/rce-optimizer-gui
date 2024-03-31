@@ -34,7 +34,7 @@ export const RobotForm = (props: RobotFormProps): JSX.Element => {
   useEffect(() => {
     if (robotInfo.id === '') {
       setIdError('Id cannot be empty')
-    } else if (robotInfo.duplicatedId !== '') {
+    } else if (robotInfo.duplicatedId) {
       setIdError('Id must be unique among all robots')
     } else {
       setIdError(undefined)

@@ -10,10 +10,11 @@ import { Position } from '../../../types/position'
 interface ActivityFormProps {
   activity: IdleActivity
   onChange: (activity: IdleActivity) => void
+  idError: string | undefined
 }
 
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { activity, onChange } = props
+  const { activity, onChange, idError } = props
   const [opened, setOpened] = useState(true)
 
   const handleChange = useCallback((value: Partial<IdleActivity>) => {
@@ -43,6 +44,8 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
           type='text'
           value={activity.id}
           onChange={id => handleChange({ id })}
+          invalid={idError !== undefined}
+          errorMessage={idError}
         />
 
         <span>Note</span>

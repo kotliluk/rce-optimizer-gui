@@ -6,7 +6,7 @@ import { Activity } from '../../types/activity'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
-| AddActivity | DeleteActivity | SetActivityInfo
+| AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
 
 
 /** ******************* Set cell info *********************/
@@ -141,6 +141,21 @@ export const setActivityInfo = (robotUuid: string, activity: Activity): SetActiv
       robotUuid,
       activity,
     },
+  }
+}
+
+/** ******************* Check robots *********************/
+
+export const CHECK_ROBOTS = 'cellDef/CHECK_ROBOTS'
+
+interface CheckRobots extends Action<typeof CHECK_ROBOTS> {
+  payload: undefined
+}
+
+export const checkRobots = (): CheckRobots => {
+  return {
+    type: CHECK_ROBOTS,
+    payload: undefined,
   }
 }
 

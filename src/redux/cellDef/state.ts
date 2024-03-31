@@ -9,6 +9,7 @@ export interface State {
   robots: Robot[]
   timeOffsets: TimeOffset[]
   collisions: Collision[]
+  checked: 'NO' | 'OK' | 'ERROR'
 }
 
 export const initialState: State = {
@@ -22,4 +23,5 @@ export const initialState: State = {
   ],
   timeOffsets: [],
   collisions: [],
+  checked: 'NO',
 }

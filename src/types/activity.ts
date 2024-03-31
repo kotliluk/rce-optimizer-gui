@@ -8,6 +8,7 @@ type ActivityCommon<T extends string> = {
   type: T,
   id: string,
   note: string,
+  duplicatedId: boolean,
 }
 
 export type IdleActivity = ActivityCommon<'IDLE'> & {
@@ -36,6 +37,7 @@ export const newIdleActivity = (): IdleActivity => {
     id: '',
     note: '',
     position: { x: 0, y: 0, z: 0 },
+    duplicatedId: false,
   }
 }
 
@@ -49,6 +51,7 @@ export const newMovementActivity = (): MovementActivity => {
     maxDuration: 5,
     fixedStartTime: undefined,
     fixedEndTime: undefined,
+    duplicatedId: false,
   }
 }
 
@@ -61,5 +64,6 @@ export const newWorkActivity = (): WorkActivity => {
     duration: 5,
     fixedStartTime: undefined,
     fixedEndTime: undefined,
+    duplicatedId: false,
   }
 }
