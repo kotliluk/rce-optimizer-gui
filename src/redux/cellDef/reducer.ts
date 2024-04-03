@@ -22,12 +22,14 @@ export function reducer (state = initialState, action: Actions): State {
       return {
         ...state,
         cellInfo: action.payload.cellInfo,
+        checked: 'NO',
       }
 
     case ADD_ROBOT:
       return {
         ...state,
         robots: [...state.robots, newRobot()],
+        checked: 'NO',
       }
 
     case DELETE_ROBOT: {
@@ -37,6 +39,7 @@ export function reducer (state = initialState, action: Actions): State {
       return {
         ...state,
         robots: (robots.length === 0) ? [newRobot()] : robots,
+        checked: 'NO',
       }
     }
 
@@ -51,6 +54,7 @@ export function reducer (state = initialState, action: Actions): State {
           }
           return robot
         }),
+        checked: 'NO',
       }
     }
 
@@ -65,6 +69,7 @@ export function reducer (state = initialState, action: Actions): State {
           ? { ...r, activities: [...r.activities, activity, position] }
           : r
         ),
+        checked: 'NO',
       }
     }
 
@@ -87,6 +92,7 @@ export function reducer (state = initialState, action: Actions): State {
             activities: robot.activities.filter((a) => a.uuid !== uuid1 && a.uuid !== uuid2),
           }
         }),
+        checked: 'NO',
       }
     }
 
@@ -106,6 +112,7 @@ export function reducer (state = initialState, action: Actions): State {
               .map((a) => a.uuid === activity.uuid ? { ...activity, duplicatedId: false } : a),
           }
         }),
+        checked: 'NO',
       }
     }
 

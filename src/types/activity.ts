@@ -12,6 +12,8 @@ type ActivityCommon<T extends string> = {
 }
 
 export type IdleActivity = ActivityCommon<'IDLE'> & {
+  minDuration: number,
+  maxDuration: number,
   position: Position,
 }
 
@@ -36,6 +38,8 @@ export const newIdleActivity = (): IdleActivity => {
     type: 'IDLE',
     id: '',
     note: '',
+    minDuration: 1,
+    maxDuration: 5,
     position: { x: 0, y: 0, z: 0 },
     duplicatedId: false,
   }

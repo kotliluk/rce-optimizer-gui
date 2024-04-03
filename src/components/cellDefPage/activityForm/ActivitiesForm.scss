@@ -1,0 +1,77 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.activities-form {
+  .activity-form {
+    padding: 0.5rem;
+    border-radius: $border-radius;
+
+    @include themed() {
+      &.idle {
+        background: t($idle-activity-background);
+      }
+
+      &.work {
+        background: t($work-activity-background);
+      }
+
+      &.movement {
+        background: t($movement-activity-background);
+      }
+    }
+
+    .activity-form-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .activity-form-title {
+        flex-grow: 1;
+      }
+    }
+
+    &.body-hidden {
+      .delete-btn {
+        visibility: hidden;
+      }
+
+      .activity-form-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 1s, overflow 0s;
+      }
+    }
+
+    &.body-opened {
+      .delete-btn {
+        visibility: visible;
+      }
+
+      .activity-form-body {
+        max-height: unset;
+        overflow: auto;
+        transition: max-height 1s, overflow 0s;
+      }
+    }
+
+    .position-input {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-grow: 1;
+
+      .__input-wrapper {
+        width: 3rem;
+
+        .__input {
+          width: 100%;
+        }
+      }
+    }
+
+    .duration-input {
+      width: 4rem;
+    }
+  }
+}

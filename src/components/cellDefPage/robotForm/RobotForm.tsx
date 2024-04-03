@@ -1,13 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 import React, { useCallback, useEffect, useState } from 'react'
 
-import './RobotForm.scss'
 import { Input } from '../../atoms/input/Input'
 import { useDispatch } from '../../../redux/useDispatch'
 import { deleteRobot, setRobotInfo } from '../../../redux/cellDef/actions'
 import { Robot, RobotInfo } from '../../../types/robot'
 import { Button } from '../../atoms/button/Button'
 import { ActivitiesForm } from '../activityForm/ActivitiesForm'
+import { useSelector } from '../../../redux/useSelector'
+import { selectTranslation } from '../../../redux/page/selector'
+import { Cross } from '../../icons/Cross'
+import { DownArrow } from '../../icons/DownArrow'
 
 
 interface RobotFormProps {
@@ -15,6 +18,7 @@ interface RobotFormProps {
 }
 
 export const RobotForm = (props: RobotFormProps): JSX.Element => {
+  const { cellDefPage: { robots: t } } = useSelector(selectTranslation)
   const { robot: { activities, ...robotInfo } } = props
   const [opened, setOpened] = useState(true)
   const [idError, setIdError] = useState<string | undefined>(undefined)
@@ -33,38 +37,45 @@ export const RobotForm = (props: RobotFormProps): JSX.Element => {
 
   useEffect(() => {
     if (robotInfo.id === '') {
-      setIdError('Id cannot be empty')
+      setIdError(t.errorIdEmpty)
     } else if (robotInfo.duplicatedId) {
-      setIdError('Id must be unique among all robots')
+      setIdError(t.errorIdNotUnique)
     } else {
       setIdError(undefined)
     }
-  }, [robotInfo.id, robotInfo.duplicatedId, setIdError])
+  }, [robotInfo.id, robotInfo.duplicatedId, t, setIdError])
 
   return (
     <div className={`robot-form ${opened ? 'body-opened' : 'body-hidden'}`}>
       <div className='robot-form-header'>
-        <span className='robot-form-title'>ROBOT {robotInfo.id}</span>
-        <Button className='delete-btn' onClick={handleDelete}>X</Button>
-        <Button className='toggle-btn' onClick={() => setOpened(v => !v)}>{opened ? '^' : 'v'}</Button>
+        <span className='robot-form-title'>{t.robotLabel} {robotInfo.id}</span>
+        <Button className='delete-btn' onClick={handleDelete}>
+          <Cross />
+        </Button>
+        <Button className='toggle-btn' onClick={() => setOpened(v => !v)}>
+          <DownArrow className={`${opened ? 'up' : 'down'}`} />
+        </Button>
       </div>
 
       <div className='robot-form-body'>
-        <span>Id</span>
-        <Input
-          type='text'
-          value={robotInfo.id}
-          onChange={id => handleChange({ id })}
-          invalid={idError !== undefined}
-          errorMessage={idError}
-        />
+        <div className='form-row'>
+          <Input
+            className='id-input'
+            label={`${t.id}: `}
+            type='text'
+            value={robotInfo.id}
+            onChange={id => handleChange({ id })}
+            invalid={idError !== undefined}
+            errorMessage={idError}
+          />
 
-        <span>Note</span>
-        <Input
-          type='text'
-          value={robotInfo.note}
-          onChange={note => handleChange({ note })}
-        />
+          <Input
+            label={`${t.note}: `}
+            type='text'
+            value={robotInfo.note}
+            onChange={note => handleChange({ note })}
+          />
+        </div>
 
         <ActivitiesForm
           robotUuid={robotInfo.uuid}

@@ -2,8 +2,10 @@
 import React, { useCallback, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
-import { Button } from '../../atoms/button/Button'
 import { WorkActivity } from '../../../types/activity'
+import { useSelector } from '../../../redux/useSelector'
+import { selectTranslation } from '../../../redux/page/selector'
+import { ActivityHeader } from './ActivityHeader'
 
 
 interface ActivityFormProps {
@@ -14,6 +16,7 @@ interface ActivityFormProps {
 }
 
 export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
+  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
 
@@ -25,36 +28,45 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
   }, [activity])
 
   return (
-    <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'}`}>
-      <div className='activity-form-header'>
-        <span className='activity-form-title'>WORK ACTIVITY {activity.id}</span>
-        <Button className='delete-btn' onClick={() => onDelete(activity.uuid)}>X</Button>
-        <Button className='toggle-btn' onClick={() => setOpened(v => !v)}>{opened ? '^' : 'v'}</Button>
-      </div>
+    <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} work`}>
+      <ActivityHeader
+        bodyOpened={opened}
+        openedTitle={`${t.workActivityLabel} ${activity.id}`}
+        closedTitle={`${t.workActivityLabel} ${activity.id} (${activity.duration} s)`}
+        onDelete={() => onDelete(activity.uuid)}
+        setBodyOpened={setOpened}
+      />
 
       <div className='activity-form-body'>
-        <span>Id</span>
-        <Input
-          type='text'
-          value={activity.id}
-          onChange={id => handleChange({ id })}
-          invalid={idError !== undefined}
-          errorMessage={idError}
-        />
+        <div className='form-row'>
+          <Input
+            className='id-input'
+            label={`${t.id}: `}
+            type='text'
+            value={activity.id}
+            onChange={id => handleChange({ id })}
+            invalid={idError !== undefined}
+            errorMessage={idError}
+          />
 
-        <span>Note</span>
-        <Input
-          type='text'
-          value={activity.note}
-          onChange={note => handleChange({ note })}
-        />
+          <Input
+            className='duration-input'
+            label={`${t.duration}: `}
+            type='number'
+            value={activity.duration}
+            onChange={duration => handleChange({ duration: parseFloat(duration) })}
+          />
+        </div>
 
-        <span>Duration</span>
-        <Input
-          type='number'
-          value={activity.duration}
-          onChange={duration => handleChange({ duration: parseFloat(duration) })}
-        />
+        <div className='form-row'>
+          <Input
+            label={`${t.note}: `}
+            type='text'
+            className='note-input'
+            value={activity.note}
+            onChange={note => handleChange({ note })}
+          />
+        </div>
 
         {/* TODO - undefined checkbox */}
         {/* <span>Fixed start time</span>*/}

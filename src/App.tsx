@@ -9,8 +9,6 @@ import { selectTheme } from './redux/page/selector'
 import { CellDefPage } from './pages/cellDef/CellDefPage'
 
 
-// TODO - unique robot ids
-// TODO - unique activity ids
 // TODO - style
 // TODO - time offsets
 // TODO - collision

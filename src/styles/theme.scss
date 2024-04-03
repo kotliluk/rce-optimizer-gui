@@ -6,19 +6,28 @@ $primary-color: 'primary-color';
 $secondary-color: 'secondary-color';
 $primary-text: 'primary-text';
 $secondary-text: 'secondary-text';
+$idle-activity-background: 'idle-activity-background';
+$work-activity-background: 'work-activity-background';
+$movement-activity-background: 'movement-activity-background';
 
 $themes: (
   light: (
           primary-color: $white,
           secondary-color: $grey-light,
           primary-text: $black,
-          secondary-text: $grey-dark
+          secondary-text: $grey-dark,
+          idle-activity-background: $green-light,
+          work-activity-background: $red-light,
+          movement-activity-background: $blue-light,
   ),
   dark: (
           primary-color: $grey,
           secondary-color: $grey-dark,
           primary-text: $white,
-          secondary-text: $grey-light
+          secondary-text: $grey-light,
+          idle-activity-background: $green-dark,
+          work-activity-background: $red-dark,
+          movement-activity-background: $blue-dark,
   ),
 );
 

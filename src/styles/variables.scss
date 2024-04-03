@@ -2,9 +2,9 @@ $fontFamily: 'Open Sans', sans-serif;
 
 // page layout
 $page-header-height: 5rem;
-$screen-side-padding-small-device: 10vw;
-$screen-side-padding-medium-device: 20vw;
-$screen-side-padding-large-device: 25vw;
+$screen-side-padding-small-device: 5vw;
+$screen-side-padding-medium-device: 10vw;
+$screen-side-padding-large-device: 15vw;
 $screen-content-width-small-device: calc(100vw - 2 * #{$screen-side-padding-small-device});
 $screen-content-width-medium-device: calc(100vw - 2 * #{$screen-side-padding-medium-device});
 $screen-content-width-large-device: calc(100vw - 2 * #{$screen-side-padding-large-device});
@@ -25,7 +25,7 @@ $grey: #525256;
 $grey-dark: #36393f;
 $black: #000000;
 
-$green-light: #17b317;
+$green-light: #64ee64;
 $green: #159115;
 $green-dark: #107510;
 
@@ -35,10 +35,13 @@ $orange-light: #f99c3c;
 $orange: #f57c00;
 $orange-dark: #bc6200;
 
-$red-light: #f89a9a;
+$red-light: #f67a7a;
 $red: #cf0e0e;
+$red-dark: #810505;
 
+$blue-light: #84b0ec;
 $blue: #0965de;
+$blue-dark: #053b80;
 
 // text sizes
 $text-small: 0.75rem;
