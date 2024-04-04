@@ -1,28 +1,38 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
-import { MovementActivity } from '../../../types/activity'
+import { Activity, MovementActivity, newWorkActivity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
 import { CheckBox } from '../../atoms/checkBox/CheckBox'
+import { useMinMaxDurationValidator } from '../hooks/useMinMaxDurationValidator'
+import { isDefNaN } from '../../../utils/number'
 
 
 interface ActivityFormProps {
   activity: MovementActivity
-  onChange: (activity: MovementActivity) => void
+  onChange: (activity: Activity) => void
   onDelete: (activityUuid: string) => void
   idError: string | undefined
 }
 
-// TODO - Error - minDuration > maxDuration
-// TODO - Error - both fixed start and fixed end specified - use WorkActivity
-
 export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
+  const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
+  const [durationError, minDurationError, maxDurationError] = useMinMaxDurationValidator(activity, ct, t)
+  const [fixedStartError, setFixedStartError] = useState<string | undefined>(undefined)
+  const [fixedEndError, setFixedEndError] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setFixedStartError(isDefNaN(activity.fixedStartTime) ? ct.errorRequired : undefined)
+  }, [activity.fixedStartTime, t, setFixedStartError])
+
+  useEffect(() => {
+    setFixedEndError(isDefNaN(activity.fixedEndTime) ? ct.errorRequired : undefined)
+  }, [activity.fixedEndTime, t, setFixedEndError])
 
   const handleChange = useCallback((value: Partial<MovementActivity>) => {
     onChange({
@@ -39,6 +49,8 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
         bodyOpened={opened}
         openedTitle={`${t.movementActivityLabel} ${id}`}
         closedTitle={`${t.movementActivityLabel} ${id} (${minDuration}-${maxDuration} s)`}
+        changeBtnLabel={t.changeToWorkActivity}
+        onChange={() => onChange(newWorkActivity(uuid))}
         onDelete={() => onDelete(uuid)}
         setBodyOpened={setOpened}
       />
@@ -62,6 +74,8 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             min={0}
             value={minDuration}
             onChange={minDuration => handleChange({ minDuration: parseFloat(minDuration) })}
+            invalid={durationError !== undefined || minDurationError !== undefined}
+            errorMessage={durationError ?? minDurationError}
           />
 
           <Input
@@ -71,15 +85,19 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             min={0}
             value={maxDuration}
             onChange={maxDuration => handleChange({ maxDuration: parseFloat(maxDuration) })}
+            invalid={durationError !== undefined || maxDurationError !== undefined}
+            errorMessage={durationError ?? maxDurationError}
           />
         </div>
 
         <div className='form-row'>
           <div className='fixed-time-input'>
-            <span>{t.fixedStartTime}</span>
+            <span>{t.fixedStartTime}:</span>
             <CheckBox
               checked={fixedStartTime !== undefined}
-              onChange={checked => handleChange({ fixedStartTime: checked ? 0 : undefined })}
+              onChange={checked => handleChange(
+                checked ? { fixedStartTime: 0, fixedEndTime: undefined } : { fixedStartTime: undefined }
+              )}
             />
             {fixedStartTime !== undefined && (
               <Input
@@ -87,15 +105,19 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
                 min={0}
                 value={fixedStartTime}
                 onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
+                invalid={fixedStartError !== undefined}
+                errorMessage={fixedStartError}
               />
             )}
           </div>
 
           <div className='fixed-time-input'>
-            <span>{t.fixedEndTime}</span>
+            <span>{t.fixedEndTime}:</span>
             <CheckBox
               checked={fixedEndTime !== undefined}
-              onChange={checked => handleChange({ fixedEndTime: checked ? 0 : undefined })}
+              onChange={checked => handleChange(
+                checked ? { fixedEndTime: 0, fixedStartTime: undefined } : { fixedEndTime: undefined }
+              )}
             />
             {fixedEndTime !== undefined && (
               <Input
@@ -103,6 +125,8 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
                 min={0}
                 value={fixedEndTime}
                 onChange={fixedEndTime => handleChange({ fixedEndTime: parseFloat(fixedEndTime) })}
+                invalid={fixedEndError !== undefined}
+                errorMessage={fixedEndError}
               />
             )}
           </div>

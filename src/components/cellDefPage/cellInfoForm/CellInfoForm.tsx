@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import './CellInfoForm.scss'
 import { useSelector } from '../../../redux/useSelector'
@@ -9,12 +9,23 @@ import { useDispatch } from '../../../redux/useDispatch'
 import { setCellInfo } from '../../../redux/cellDef/actions'
 import { CellInfo } from '../../../types/cellInfo'
 import { selectTranslation } from '../../../redux/page/selector'
+import { isDefNaN } from '../../../utils/number'
 
 
 export const CellInfoForm = (): JSX.Element => {
-  const { cellDefPage: { cellInfo: t } } = useSelector(selectTranslation)
+  const { common: ct, cellDefPage: { cellInfo: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()
   const cellInfo = useSelector(selectCellInfo)
+  const [nameError, setNameError] = useState<string | undefined>(undefined)
+  const [cycleTimeError, setCycleTimeError] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setNameError(cellInfo.name.length === 0 ? ct.errorRequired : undefined)
+  }, [cellInfo.name, t, setNameError])
+
+  useEffect(() => {
+    setCycleTimeError(isDefNaN(cellInfo.cycleTime) ? ct.errorRequired : undefined)
+  }, [cellInfo.cycleTime, t, setCycleTimeError])
 
   const handleChange = useCallback((value: Partial<CellInfo>) => {
     dispatch(setCellInfo({
@@ -31,6 +42,8 @@ export const CellInfoForm = (): JSX.Element => {
           type='text'
           value={cellInfo.name}
           onChange={name => handleChange({ name })}
+          invalid={nameError !== undefined}
+          errorMessage={nameError}
         />
 
         <Input
@@ -38,6 +51,8 @@ export const CellInfoForm = (): JSX.Element => {
           type='number'
           value={cellInfo.cycleTime}
           onChange={cycleTime => handleChange({ cycleTime: parseFloat(cycleTime) })}
+          invalid={cycleTimeError !== undefined}
+          errorMessage={cycleTimeError}
         />
       </div>
 

@@ -2,25 +2,26 @@
 import React, { useCallback, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
-import { IdleActivity } from '../../../types/activity'
+import { Activity, IdleActivity } from '../../../types/activity'
 import { formatPosition, Position } from '../../../types/position'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
+import { useMinMaxDurationValidator } from '../hooks/useMinMaxDurationValidator'
 
 
 interface ActivityFormProps {
   activity: IdleActivity
-  onChange: (activity: IdleActivity) => void
+  onChange: (activity: Activity) => void
   idError: string | undefined
 }
 
-// TODO - Error - minDuration > maxDuration
-
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
+  const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, idError } = props
   const [opened, setOpened] = useState(true)
+
+  const [durationError, minDurationError, maxDurationError] = useMinMaxDurationValidator(activity, ct, t)
 
   const handleChange = useCallback((value: Partial<IdleActivity>) => {
     onChange({
@@ -66,6 +67,8 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             min={0}
             value={minDuration}
             onChange={minDuration => handleChange({ minDuration: parseFloat(minDuration) })}
+            invalid={durationError !== undefined || minDurationError !== undefined}
+            errorMessage={durationError ?? minDurationError}
           />
 
           <Input
@@ -75,6 +78,8 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             min={0}
             value={maxDuration}
             onChange={maxDuration => handleChange({ maxDuration: parseFloat(maxDuration) })}
+            invalid={durationError !== undefined || maxDurationError !== undefined}
+            errorMessage={durationError ?? maxDurationError}
           />
         </div>
 

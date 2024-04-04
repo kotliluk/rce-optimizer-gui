@@ -12,6 +12,8 @@ export const CS: Translation = {
     // user actions
     back: 'Zpět',
     reset: 'Reset',
+    // errors
+    errorRequired: 'Povinné pole',
   },
   mainPage: {
     title: 'RCE Optimizer',
@@ -43,6 +45,8 @@ export const CS: Translation = {
         idleActivityLabel: 'Statická pozice',
         movementActivityLabel: 'Pohyb',
         workActivityLabel: 'Práce',
+        changeToMovementActivity: 'Změnit na pohyb',
+        changeToWorkActivity: 'Změnit na práci',
         id: 'Id',
         position: 'Pozice',
         note: 'Poznámka',
@@ -53,6 +57,8 @@ export const CS: Translation = {
         fixedEndTime: 'Fixní konec',
         errorIdEmpty: 'Id nemůže být prázdné',
         errorIdNotUnique: 'Id musí být jedinečné mezi všemi aktivitami',
+        errorMinMaxDurationOrder: 'Min trvání je větší než maximální trvání',
+        errorBothFixedUsedInMovement: 'Použijte "Práci" pro nastavení obou fixních časů',
       },
     },
   },

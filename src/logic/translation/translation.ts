@@ -15,6 +15,8 @@ export interface Translation {
     // user actions
     back: string,
     reset: string,
+    // errors
+    errorRequired: string,
   }
   mainPage: {
     title: string,
@@ -46,6 +48,8 @@ export interface Translation {
         idleActivityLabel: string,
         movementActivityLabel: string,
         workActivityLabel: string,
+        changeToMovementActivity: string,
+        changeToWorkActivity: string,
         id: string,
         position: string,
         note: string,
@@ -56,6 +60,8 @@ export interface Translation {
         fixedEndTime: string,
         errorIdEmpty: string,
         errorIdNotUnique: string,
+        errorMinMaxDurationOrder: string,
+        errorBothFixedUsedInMovement: string,
       },
     },
   }

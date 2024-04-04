@@ -1,25 +1,31 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
-import { WorkActivity } from '../../../types/activity'
+import { Activity, newMovementActivity, WorkActivity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
 import { CheckBox } from '../../atoms/checkBox/CheckBox'
+import { isDefNaN } from '../../../utils/number'
 
 
 interface ActivityFormProps {
   activity: WorkActivity
-  onChange: (activity: WorkActivity) => void
+  onChange: (activity: Activity) => void
   onDelete: (activityUuid: string) => void
   idError: string | undefined
 }
 
 export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
+  const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
+  const [fixedStartError, setFixedStartError] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setFixedStartError(isDefNaN(activity.fixedStartTime) ? ct.errorRequired : undefined)
+  }, [activity.fixedStartTime, t, setFixedStartError])
 
   const handleChange = useCallback((value: Partial<WorkActivity>) => {
     onChange({
@@ -36,6 +42,8 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
         bodyOpened={opened}
         openedTitle={`${t.workActivityLabel} ${id}`}
         closedTitle={`${t.workActivityLabel} ${id} (${duration} s)`}
+        changeBtnLabel={t.changeToMovementActivity}
+        onChange={() => onChange(newMovementActivity(uuid))}
         onDelete={() => onDelete(uuid)}
         setBodyOpened={setOpened}
       />
@@ -64,7 +72,7 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
 
         <div className='form-row'>
           <div className='fixed-time-input'>
-            <span>{t.fixedStartTime}</span>
+            <span>{t.fixedStartTime}:</span>
             <CheckBox
               checked={fixedStartTime !== undefined}
               onChange={checked => handleChange({ fixedStartTime: checked ? 0 : undefined })}
@@ -75,6 +83,8 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
                 min={0}
                 value={fixedStartTime}
                 onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
+                invalid={fixedStartError !== undefined}
+                errorMessage={fixedStartError}
               />
             )}
           </div>

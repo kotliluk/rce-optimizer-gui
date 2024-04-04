@@ -12,6 +12,8 @@ export const EN: Translation = {
     // user actions
     back: 'Back',
     reset: 'Reset',
+    // errors
+    errorRequired: 'Required field',
   },
   mainPage: {
     title: 'RCE Optimizer',
@@ -43,6 +45,8 @@ export const EN: Translation = {
         idleActivityLabel: 'Static position',
         movementActivityLabel: 'Movement',
         workActivityLabel: 'Work',
+        changeToMovementActivity: 'Change to Move',
+        changeToWorkActivity: 'Change to Work',
         id: 'Id',
         position: 'Position',
         note: 'Note',
@@ -53,6 +57,8 @@ export const EN: Translation = {
         fixedEndTime: 'Fixed end',
         errorIdEmpty: 'Id cannot be empty',
         errorIdNotUnique: 'Id must be unique among all activities',
+        errorMinMaxDurationOrder: 'Min duration is less than max duration',
+        errorBothFixedUsedInMovement: 'Use "Work" to set both fixed times',
       },
     },
   },

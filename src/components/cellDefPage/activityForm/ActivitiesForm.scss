@@ -32,7 +32,7 @@
     }
 
     &.body-hidden {
-      .delete-btn {
+      .delete-btn, .text-btn {
         visibility: hidden;
       }
 
@@ -44,7 +44,7 @@
     }
 
     &.body-opened {
-      .delete-btn {
+      .delete-btn, .text-btn {
         visibility: visible;
       }
 

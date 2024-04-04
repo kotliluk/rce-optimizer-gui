@@ -17,3 +17,8 @@ export const parseFloatOrDefault = (str: string | null, defaultFloat: number): n
 }
 
 export const intOrDefaultParser = (defInt: number) => (str: string | null): number => parseIntOrDefault(str, defInt)
+
+/**
+ * Returns whether the given value is defined (not undefined) and NaN.
+ */
+export const isDefNaN = (v: number | undefined): boolean => v !== undefined && isNaN(v)

@@ -62,16 +62,16 @@
     align-items: center;
     justify-content: space-around;
     padding: 0.5rem;
+  }
 
-    .__button {
-      @include themed() {
-        border: 2px solid t($secondary-color);
-        background: t($secondary-color);
-        color: t($primary-text);
+  .text-btn {
+    @include themed() {
+      border: 2px solid t($secondary-color);
+      background: t($secondary-color);
+      color: t($primary-text);
 
-        &:hover {
-          background: t($primary-color);
-        }
+      &:hover {
+        background: t($primary-color);
       }
     }
   }

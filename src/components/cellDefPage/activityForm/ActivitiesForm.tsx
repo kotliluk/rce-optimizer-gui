@@ -45,10 +45,10 @@ export const ActivitiesForm = (props: ActivitiesFormProps): JSX.Element => {
         />
       ))}
       <div className='btns-row'>
-        <Button onClick={() => handleAddNewActivity('MOVEMENT')}>
+        <Button className='text-btn' onClick={() => handleAddNewActivity('MOVEMENT')}>
           {t.addMovementBtn}
         </Button>
-        <Button onClick={() => handleAddNewActivity('WORK')}>
+        <Button className='text-btn' onClick={() => handleAddNewActivity('WORK')}>
           {t.addWorkBtn}
         </Button>
       </div>

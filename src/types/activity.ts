@@ -44,9 +44,9 @@ export const newIdleActivity = (): IdleActivity => {
   }
 }
 
-export const newMovementActivity = (): MovementActivity => {
+export const newMovementActivity = (uuid?: string): MovementActivity => {
   return {
-    uuid: uuidV4(),
+    uuid: uuid ?? uuidV4(),
     type: 'MOVEMENT',
     id: '',
     note: '',
@@ -58,9 +58,9 @@ export const newMovementActivity = (): MovementActivity => {
   }
 }
 
-export const newWorkActivity = (): WorkActivity => {
+export const newWorkActivity = (uuid?: string): WorkActivity => {
   return {
-    uuid: uuidV4(),
+    uuid: uuid ?? uuidV4(),
     type: 'WORK',
     id: '',
     note: '',
