@@ -6,6 +6,7 @@ import { MovementActivity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
+import { CheckBox } from '../../atoms/checkBox/CheckBox'
 
 
 interface ActivityFormProps {
@@ -14,6 +15,9 @@ interface ActivityFormProps {
   onDelete: (activityUuid: string) => void
   idError: string | undefined
 }
+
+// TODO - Error - minDuration > maxDuration
+// TODO - Error - both fixed start and fixed end specified - use WorkActivity
 
 export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
@@ -27,13 +31,15 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
     })
   }, [activity])
 
+  const { id, uuid, minDuration, maxDuration, fixedStartTime, fixedEndTime, note } = activity
+
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} movement`}>
       <ActivityHeader
         bodyOpened={opened}
-        openedTitle={`${t.movementActivityLabel} ${activity.id}`}
-        closedTitle={`${t.movementActivityLabel} ${activity.id} (${activity.minDuration}-${activity.maxDuration} s)`}
-        onDelete={() => onDelete(activity.uuid)}
+        openedTitle={`${t.movementActivityLabel} ${id}`}
+        closedTitle={`${t.movementActivityLabel} ${id} (${minDuration}-${maxDuration} s)`}
+        onDelete={() => onDelete(uuid)}
         setBodyOpened={setOpened}
       />
 
@@ -43,7 +49,7 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='id-input'
             label={`${t.id}: `}
             type='text'
-            value={activity.id}
+            value={id}
             onChange={id => handleChange({ id })}
             invalid={idError !== undefined}
             errorMessage={idError}
@@ -53,7 +59,8 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='duration-input'
             label={`${t.minDuration}: `}
             type='number'
-            value={activity.minDuration}
+            min={0}
+            value={minDuration}
             onChange={minDuration => handleChange({ minDuration: parseFloat(minDuration) })}
           />
 
@@ -61,9 +68,44 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='duration-input'
             label={`${t.maxDuration}: `}
             type='number'
-            value={activity.maxDuration}
+            min={0}
+            value={maxDuration}
             onChange={maxDuration => handleChange({ maxDuration: parseFloat(maxDuration) })}
           />
+        </div>
+
+        <div className='form-row'>
+          <div className='fixed-time-input'>
+            <span>{t.fixedStartTime}</span>
+            <CheckBox
+              checked={fixedStartTime !== undefined}
+              onChange={checked => handleChange({ fixedStartTime: checked ? 0 : undefined })}
+            />
+            {fixedStartTime !== undefined && (
+              <Input
+                type='number'
+                min={0}
+                value={fixedStartTime}
+                onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
+              />
+            )}
+          </div>
+
+          <div className='fixed-time-input'>
+            <span>{t.fixedEndTime}</span>
+            <CheckBox
+              checked={fixedEndTime !== undefined}
+              onChange={checked => handleChange({ fixedEndTime: checked ? 0 : undefined })}
+            />
+            {fixedEndTime !== undefined && (
+              <Input
+                type='number'
+                min={0}
+                value={fixedEndTime}
+                onChange={fixedEndTime => handleChange({ fixedEndTime: parseFloat(fixedEndTime) })}
+              />
+            )}
+          </div>
         </div>
 
         <div className='form-row'>
@@ -71,25 +113,10 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
             label={`${t.note}: `}
             type='text'
             className='note-input'
-            value={activity.note}
+            value={note}
             onChange={note => handleChange({ note })}
           />
         </div>
-
-        {/* TODO - undefined checkbox */}
-        {/* <span>Fixed start time</span>*/}
-        {/* <Input*/}
-        {/*  type='number'*/}
-        {/*  value={activity.fixedStartTime}*/}
-        {/*  onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}*/}
-        {/* />*/}
-
-        {/* <span>Fixed end time</span>*/}
-        {/* <Input*/}
-        {/*  type='number'*/}
-        {/*  value={activity.fixedEndTime}*/}
-        {/*  onChange={fixedEndTime => handleChange({ fixedEndTime: parseFloat(fixedEndTime) })}*/}
-        {/* />*/}
       </div>
     </div>
   )

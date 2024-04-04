@@ -57,7 +57,7 @@ export const RobotForm = (props: RobotFormProps): JSX.Element => {
         </Button>
       </div>
 
-      <div className='robot-form-body'>
+      <div className='robot-form-body' style={{ maxHeight: opened ? `${100 + activities.length * 300}px` : '0' }}>
         <div className='form-row'>
           <Input
             className='id-input'

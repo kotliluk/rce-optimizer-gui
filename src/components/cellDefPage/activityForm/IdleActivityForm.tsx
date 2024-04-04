@@ -15,6 +15,8 @@ interface ActivityFormProps {
   idError: string | undefined
 }
 
+// TODO - Error - minDuration > maxDuration
+
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, idError } = props
@@ -34,14 +36,14 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
     })
   }, [activity])
 
-  // TODO - IDLE min max duration
+  const { id, position, minDuration, maxDuration, note } = activity
 
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} idle`}>
       <ActivityHeader
         bodyOpened={opened}
-        openedTitle={`${t.idleActivityLabel} ${activity.id}`}
-        closedTitle={`${t.idleActivityLabel} ${activity.id} ${formatPosition(activity.position)}`}
+        openedTitle={`${t.idleActivityLabel} ${id}`}
+        closedTitle={`${t.idleActivityLabel} ${id} ${formatPosition(position)} (${minDuration}-${maxDuration} s)`}
         setBodyOpened={setOpened}
       />
 
@@ -51,27 +53,47 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='id-input'
             label={`${t.id}: `}
             type='text'
-            value={activity.id}
+            value={id}
             onChange={id => handleChange({ id })}
             invalid={idError !== undefined}
             errorMessage={idError}
           />
 
+          <Input
+            className='duration-input'
+            label={`${t.minDuration}: `}
+            type='number'
+            min={0}
+            value={minDuration}
+            onChange={minDuration => handleChange({ minDuration: parseFloat(minDuration) })}
+          />
+
+          <Input
+            className='duration-input'
+            label={`${t.maxDuration}: `}
+            type='number'
+            min={0}
+            value={maxDuration}
+            onChange={maxDuration => handleChange({ maxDuration: parseFloat(maxDuration) })}
+          />
+        </div>
+
+        <div className='form-row'>
           <div className='position-input'>
             <span className='__input-label'>{t.position}:&nbsp;</span>
             <Input
               type='number'
-              value={activity.position.x}
+              value={position.x}
               onChange={x => handlePositionChange({ x: parseFloat(x) })}
             />
             <Input
               type='number'
-              value={activity.position.y}
+              value={position.y}
               onChange={y => handlePositionChange({ y: parseFloat(y) })}
             />
             <Input
               type='number'
-              value={activity.position.z}
+              value={position.z}
               onChange={z => handlePositionChange({ z: parseFloat(z) })}
             />
           </div>
@@ -82,7 +104,7 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             label={`${t.note}: `}
             type='text'
             className='note-input'
-            value={activity.note}
+            value={note}
             onChange={note => handleChange({ note })}
           />
         </div>

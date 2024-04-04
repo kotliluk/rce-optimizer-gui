@@ -31,10 +31,8 @@
       }
 
       .robot-form-body {
-        max-height: 0;
         overflow: hidden;
-        // TODO - transition
-        transition: max-height 1s, overflow 0s;
+        transition: max-height 0.3s ease-out;
       }
     }
 
@@ -44,9 +42,8 @@
       }
 
       .robot-form-body {
-        max-height: unset;
-        overflow: auto;
-        transition: max-height 1s, overflow 0s;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in;
       }
     }
   }

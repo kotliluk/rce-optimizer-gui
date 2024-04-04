@@ -27,7 +27,6 @@ export type MovementActivity = ActivityCommon<'MOVEMENT'> & {
 export type WorkActivity = ActivityCommon<'WORK'> & {
   duration: number,
   fixedStartTime: number | undefined,
-  fixedEndTime: number | undefined,
 }
 
 export type Activity = IdleActivity | MovementActivity | WorkActivity
@@ -67,7 +66,6 @@ export const newWorkActivity = (): WorkActivity => {
     note: '',
     duration: 5,
     fixedStartTime: undefined,
-    fixedEndTime: undefined,
     duplicatedId: false,
   }
 }

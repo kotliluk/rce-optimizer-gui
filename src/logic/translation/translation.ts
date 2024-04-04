@@ -52,6 +52,8 @@ export interface Translation {
         minDuration: string,
         maxDuration: string,
         duration: string,
+        fixedStartTime: string,
+        fixedEndTime: string,
         errorIdEmpty: string,
         errorIdNotUnique: string,
       },

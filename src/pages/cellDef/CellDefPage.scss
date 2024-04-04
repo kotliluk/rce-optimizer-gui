@@ -10,6 +10,18 @@
     text-align: center;
   }
 
+  // do not show number input arrows
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  // do not show number input arrows - Mozilla
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
   .id-input {
     width: 10rem;
   }
@@ -97,12 +109,12 @@
   .toggle-btn {
     svg.up {
       rotate: 180deg;
-      transition: 0.3s linear rotate;
+      transition: rotate 0.3s linear;
     }
 
     svg.down {
       rotate: 0;
-      transition: 0.3s linear rotate;
+      transition: rotate 0.3s linear;
     }
   }
 }

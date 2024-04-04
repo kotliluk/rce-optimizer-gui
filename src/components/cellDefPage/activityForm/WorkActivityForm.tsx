@@ -6,6 +6,7 @@ import { WorkActivity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
+import { CheckBox } from '../../atoms/checkBox/CheckBox'
 
 
 interface ActivityFormProps {
@@ -27,13 +28,15 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
     })
   }, [activity])
 
+  const { id, uuid, duration, fixedStartTime, note } = activity
+
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} work`}>
       <ActivityHeader
         bodyOpened={opened}
-        openedTitle={`${t.workActivityLabel} ${activity.id}`}
-        closedTitle={`${t.workActivityLabel} ${activity.id} (${activity.duration} s)`}
-        onDelete={() => onDelete(activity.uuid)}
+        openedTitle={`${t.workActivityLabel} ${id}`}
+        closedTitle={`${t.workActivityLabel} ${id} (${duration} s)`}
+        onDelete={() => onDelete(uuid)}
         setBodyOpened={setOpened}
       />
 
@@ -43,7 +46,7 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='id-input'
             label={`${t.id}: `}
             type='text'
-            value={activity.id}
+            value={id}
             onChange={id => handleChange({ id })}
             invalid={idError !== undefined}
             errorMessage={idError}
@@ -53,9 +56,28 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
             className='duration-input'
             label={`${t.duration}: `}
             type='number'
-            value={activity.duration}
+            min={0}
+            value={duration}
             onChange={duration => handleChange({ duration: parseFloat(duration) })}
           />
+        </div>
+
+        <div className='form-row'>
+          <div className='fixed-time-input'>
+            <span>{t.fixedStartTime}</span>
+            <CheckBox
+              checked={fixedStartTime !== undefined}
+              onChange={checked => handleChange({ fixedStartTime: checked ? 0 : undefined })}
+            />
+            {fixedStartTime !== undefined && (
+              <Input
+                type='number'
+                min={0}
+                value={fixedStartTime}
+                onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
+              />
+            )}
+          </div>
         </div>
 
         <div className='form-row'>
@@ -63,25 +85,10 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
             label={`${t.note}: `}
             type='text'
             className='note-input'
-            value={activity.note}
+            value={note}
             onChange={note => handleChange({ note })}
           />
         </div>
-
-        {/* TODO - undefined checkbox */}
-        {/* <span>Fixed start time</span>*/}
-        {/* <Input*/}
-        {/*  type='number'*/}
-        {/*  value={activity.fixedStartTime}*/}
-        {/*  onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}*/}
-        {/* />*/}
-
-        {/* <span>Fixed end time</span>*/}
-        {/* <Input*/}
-        {/*  type='number'*/}
-        {/*  value={activity.fixedEndTime}*/}
-        {/*  onChange={fixedEndTime => handleChange({ fixedEndTime: parseFloat(fixedEndTime) })}*/}
-        {/* />*/}
       </div>
     </div>
   )
