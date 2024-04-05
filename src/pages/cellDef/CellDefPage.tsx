@@ -7,6 +7,7 @@ import { selectTranslation } from '../../redux/page/selector'
 import { CellInfoForm } from '../../components/cellDefPage/cellInfoForm/CellInfoForm'
 import { RobotsForm } from '../../components/cellDefPage/robotForm/RobotsForm'
 import { TimeOffsetsForm } from '../../components/cellDefPage/timeOffsetForm/TimeOffsetsForm'
+import { CollisionsForm } from '../../components/cellDefPage/collisionForm/CollisionsForm'
 
 
 export const CellDefPage = (): JSX.Element => {
@@ -18,6 +19,7 @@ export const CellDefPage = (): JSX.Element => {
       <CellInfoForm />
       <RobotsForm />
       <TimeOffsetsForm />
+      <CollisionsForm />
     </main>
   )
 }

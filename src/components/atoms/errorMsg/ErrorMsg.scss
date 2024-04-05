@@ -1,0 +1,19 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.__error-msg {
+  display: none;
+  position: absolute;
+  width: 16rem;
+  left: calc(50% - 8rem);
+  top: calc(100% + 0.25rem);
+  z-index: 1;
+  white-space: pre-wrap;
+
+  padding: 0.25rem 0.5rem;
+  border-radius: $border-radius;
+  border: 1px solid $red;
+
+  color: $black;
+  background-color: $red-light;
+}

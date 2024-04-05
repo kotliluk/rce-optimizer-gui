@@ -24,18 +24,17 @@ export const OptionalInput = (props: OptionalInputProps): JSX.Element => {
 
   return (
     <div className={`${className} optional-input`}>
-      {label && (<span>{label}</span>)}
+      {label && (<span className='optional-input-label'>{label}</span>)}
       <CheckBox
         checked={value !== undefined}
         onChange={checked => onChange(checked ? defaultDefinedValue : undefined)}
       />
-      {value !== undefined && (
-        <Input
-          value={value}
-          onChange={onChange}
-          {...other}
-        />
-      )}
+      <Input
+        value={value !== undefined ? value : ''}
+        onChange={onChange}
+        disabled={value === undefined}
+        {...other}
+      />
     </div>
   )
 }

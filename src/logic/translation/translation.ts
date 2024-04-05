@@ -62,6 +62,8 @@ export interface Translation {
         errorIdNotUnique: string,
         errorMinMaxDurationOrder: string,
         errorBothFixedUsedInMovement: string,
+        errorNegativeDuration: string,
+        errorNegativeFixedTime: string,
       },
     },
     timeOffsets: {
@@ -74,6 +76,18 @@ export interface Translation {
       maxOffset: string,
       errorSameIds: string,
       errorMinMaxOffsetsOrder: string,
+      errorMinMaxOffsetUndef: string,
+    },
+    collisions: {
+      collisionsLabel: string,
+      addCollisionBtn: string,
+      collisionLabel: string,
+      aId: string,
+      bId: string,
+      bPrevSkipRatio: string,
+      bNextSkipRatio: string,
+      errorSameRobotIds: string,
+      errorNegativeSkipRatio: string,
     },
   }
 }

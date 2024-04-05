@@ -9,8 +9,6 @@ import { selectTheme } from './redux/page/selector'
 import { CellDefPage } from './pages/cellDef/CellDefPage'
 
 
-// TODO - time offsets
-// TODO - collision
 // TODO - style, translations
 // TODO - JSON parsing
 // TODO - connect to server API

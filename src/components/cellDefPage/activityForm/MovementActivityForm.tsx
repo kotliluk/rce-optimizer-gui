@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
 import { Activity, MovementActivity, newWorkActivity } from '../../../types/activity'
@@ -7,8 +7,8 @@ import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
 import { useMinMaxDurationValidator } from '../hooks/useMinMaxDurationValidator'
-import { isDefNaN } from '../../../utils/number'
 import { OptionalInput } from '../../atoms/input/OptionalInput'
+import { useNegativeDefNaNValidator } from '../hooks/useNegativeDefNaNValidator'
 
 
 interface ActivityFormProps {
@@ -23,16 +23,12 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
   const [durationError, minDurationError, maxDurationError] = useMinMaxDurationValidator(activity, ct, t)
-  const [fixedStartError, setFixedStartError] = useState<string | undefined>(undefined)
-  const [fixedEndError, setFixedEndError] = useState<string | undefined>(undefined)
-
-  useEffect(() => {
-    setFixedStartError(isDefNaN(activity.fixedStartTime) ? ct.errorRequired : undefined)
-  }, [activity.fixedStartTime, t, setFixedStartError])
-
-  useEffect(() => {
-    setFixedEndError(isDefNaN(activity.fixedEndTime) ? ct.errorRequired : undefined)
-  }, [activity.fixedEndTime, t, setFixedEndError])
+  const [fixedStartError] = useNegativeDefNaNValidator(
+    activity.fixedStartTime, ct.errorRequired, t.errorNegativeDuration,
+  )
+  const [fixedEndError] = useNegativeDefNaNValidator(
+    activity.fixedEndTime, ct.errorRequired, t.errorNegativeDuration,
+  )
 
   const handleChange = useCallback((value: Partial<MovementActivity>) => {
     onChange({

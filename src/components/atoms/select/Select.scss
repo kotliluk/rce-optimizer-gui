@@ -1,20 +1,36 @@
 @import 'src/styles/variables';
 @import 'src/styles/theme';
 
-.__select {
-  padding: 0.5rem;
-  font-size: $text-middle;
+.__select-wrapper {
+  position: relative;
 
-  outline: none;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: $border-radius;
+  .__select {
+    padding: 0.5rem;
+    font-size: $text-middle;
 
-  cursor: pointer;
+    outline: none;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: $border-radius;
 
-  @include themed {
-    color: t($primary-text);
-    background-color: t($primary-color);
-    border-color: t($secondary-text);
+    cursor: pointer;
+
+    @include themed {
+      color: t($primary-text);
+      background-color: t($primary-color);
+      border-color: t($secondary-text);
+    }
+  }
+
+  &.invalid {
+    .__select {
+      border-color: $red;
+    }
+  }
+
+  &.invalid:hover {
+    .__error-msg {
+      display: unset;
+    }
   }
 }

@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Input } from '../../atoms/input/Input'
 import { Activity, newMovementActivity, WorkActivity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
-import { isDefNaN } from '../../../utils/number'
 import { OptionalInput } from '../../atoms/input/OptionalInput'
+import { useNegativeDefNaNValidator } from '../hooks/useNegativeDefNaNValidator'
 
 
 interface ActivityFormProps {
@@ -21,11 +21,9 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
-  const [fixedStartError, setFixedStartError] = useState<string | undefined>(undefined)
-
-  useEffect(() => {
-    setFixedStartError(isDefNaN(activity.fixedStartTime) ? ct.errorRequired : undefined)
-  }, [activity.fixedStartTime, t, setFixedStartError])
+  const [fixedStartError] = useNegativeDefNaNValidator(
+    activity.fixedStartTime, ct.errorRequired, t.errorNegativeDuration,
+  )
 
   const handleChange = useCallback((value: Partial<WorkActivity>) => {
     onChange({

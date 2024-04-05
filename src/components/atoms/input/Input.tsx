@@ -2,6 +2,7 @@
 import React, { useCallback } from 'react'
 
 import './Input.scss'
+import { ErrorMsg } from '../errorMsg/ErrorMsg'
 
 
 interface InputProps {
@@ -14,6 +15,7 @@ interface InputProps {
   max?: number
   invalid?: boolean
   errorMessage?: string
+  disabled?: boolean
 }
 
 export const Input = (props: InputProps): JSX.Element => {
@@ -27,7 +29,7 @@ export const Input = (props: InputProps): JSX.Element => {
     <div className={`__input-wrapper ${invalid ? 'invalid' : ''}`}>
       {label ? (<span className='__input-label'>{label}</span>) : null}
       <input className={`__input ${className ?? ''}`} onChange={handleChange} {...other} />
-      {errorMessage && <span className='__input-msg'>{errorMessage}</span>}
+      <ErrorMsg errorMessage={errorMessage} />
     </div>
   )
 }

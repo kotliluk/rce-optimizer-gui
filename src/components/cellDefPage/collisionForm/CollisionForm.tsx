@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { useDispatch } from '../../../redux/useDispatch'
-import { deleteTimeOffset, setTimeOffsetInfo } from '../../../redux/cellDef/actions'
-import { TimeOffset } from '../../../types/timeOffset'
+import { deleteCollision, setCollisionInfo } from '../../../redux/cellDef/actions'
+import { Collision } from '../../../types/collision'
 import { Button } from '../../atoms/button/Button'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
@@ -12,58 +12,59 @@ import { DownArrow } from '../../icons/DownArrow'
 import { selectActivities } from '../../../redux/cellDef/selector'
 import { Select, SelectValue } from '../../atoms/select/Select'
 import { OptionalInput } from '../../atoms/input/OptionalInput'
-import { useMinMaxOffsetValidator } from '../hooks/useMinMaxOffsetValidator'
+import { useNegativeDefNaNValidator } from '../hooks/useNegativeDefNaNValidator'
 
 
-interface TimeOffsetFormProps {
-  timeOffset: TimeOffset
+interface CollisionFormProps {
+  collision: Collision
 }
 
-export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
-  const { timeOffset } = props
-  const { common: ct, cellDefPage: { timeOffsets: t } } = useSelector(selectTranslation)
+export const CollisionForm = (props: CollisionFormProps): JSX.Element => {
+  const { collision } = props
+  const { common: ct, cellDefPage: { collisions: t } } = useSelector(selectTranslation)
   const allActivities = useSelector(selectActivities)
   const [activities, setActivities] = useState<SelectValue[]>([])
   const [opened, setOpened] = useState(true)
   const [aIdError, setAIdError] = useState<string | undefined>(undefined)
   const [bIdError, setBIdError] = useState<string | undefined>(undefined)
-  const [offsetError, minOffsetError, maxOffsetError] = useMinMaxOffsetValidator(timeOffset, ct, t)
+  const [bPrevError] = useNegativeDefNaNValidator(collision.bPrevSkipRatio, ct.errorRequired, t.errorNegativeSkipRatio)
+  const [bNextError] = useNegativeDefNaNValidator(collision.bNextSkipRatio, ct.errorRequired, t.errorNegativeSkipRatio)
   const dispatch = useDispatch()
 
   const handleDelete = useCallback(() => {
-    dispatch(deleteTimeOffset(timeOffset.uuid))
-  }, [timeOffset.uuid])
+    dispatch(deleteCollision(collision.uuid))
+  }, [collision.uuid])
 
   const handleAIdChange = useCallback((aUuid: string) => {
     const activity = allActivities.find((a) => a.uuid === aUuid) ?? { id: '-', robotId: '-', text: '-' }
 
-    dispatch(setTimeOffsetInfo({
-      ...timeOffset,
+    dispatch(setCollisionInfo({
+      ...collision,
       aUuid,
       aId: activity.id,
       aRobotId: activity.robotId,
       aText: activity.text,
     }))
-  }, [timeOffset, allActivities])
+  }, [collision, allActivities])
 
   const handleBIdChange = useCallback((bUuid: string) => {
     const activity = allActivities.find((a) => a.uuid === bUuid) ?? { id: '-', robotId: '-', text: '-' }
 
-    dispatch(setTimeOffsetInfo({
-      ...timeOffset,
+    dispatch(setCollisionInfo({
+      ...collision,
       bUuid,
       bId: activity.id,
       bRobotId: activity.robotId,
       bText: activity.text,
     }))
-  }, [timeOffset, allActivities])
+  }, [collision, allActivities])
 
-  const handleChange = useCallback((value: Partial<TimeOffset>) => {
-    dispatch(setTimeOffsetInfo({
-      ...timeOffset,
+  const handleChange = useCallback((value: Partial<Collision>) => {
+    dispatch(setCollisionInfo({
+      ...collision,
       ...value,
     }))
-  }, [timeOffset])
+  }, [collision])
 
   useEffect(() => {
     setActivities([
@@ -73,20 +74,20 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
   }, [allActivities, t, setActivities])
 
   useEffect(() => {
-    if (timeOffset.aUuid !== '-' && timeOffset.aUuid === timeOffset.bUuid) {
-      setAIdError(t.errorSameIds)
-      setBIdError(t.errorSameIds)
+    if (collision.aUuid !== '-' && collision.aRobotId === collision.bRobotId) {
+      setAIdError(t.errorSameRobotIds)
+      setBIdError(t.errorSameRobotIds)
     } else {
-      setAIdError(timeOffset.aUuid === '-' ? ct.errorRequired : undefined)
-      setBIdError(timeOffset.bUuid === '-' ? ct.errorRequired : undefined)
+      setAIdError(collision.aUuid === '-' ? ct.errorRequired : undefined)
+      setBIdError(collision.bUuid === '-' ? ct.errorRequired : undefined)
     }
-  }, [timeOffset.aUuid, timeOffset.bUuid, t, setAIdError, setBIdError])
+  }, [collision.aUuid, collision.bUuid, t, setAIdError, setBIdError])
 
   return (
-    <div className={`time-offset-form ${opened ? 'body-opened' : 'body-hidden'}`}>
-      <div className='time-offset-form-header'>
-        <span className='time-offset-form-title'>
-          {t.timeOffsetLabel} ({timeOffset.aText}, {timeOffset.bText})
+    <div className={`collision-form ${opened ? 'body-opened' : 'body-hidden'}`}>
+      <div className='collision-form-header'>
+        <span className='collision-form-title'>
+          {t.collisionLabel} ({collision.aText}, {collision.bText})
         </span>
         <Button className='delete-btn' onClick={handleDelete}>
           <Cross />
@@ -96,13 +97,13 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
         </Button>
       </div>
 
-      <div className='time-offset-form-body'>
+      <div className='collision-form-body'>
         <div className='form-row'>
           <div className='id-wrapper'>
             <span className='id-label'>{t.aId}:</span>
             <Select
               className='id-input'
-              selected={timeOffset.aUuid}
+              selected={collision.aUuid}
               values={activities}
               onChange={aId => handleAIdChange(aId)}
               invalid={aIdError !== undefined}
@@ -114,7 +115,7 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
             <span className='id-label'>{t.bId}:</span>
             <Select
               className='id-input'
-              selected={timeOffset.bUuid}
+              selected={collision.bUuid}
               values={activities}
               onChange={bId => handleBIdChange(bId)}
               invalid={bIdError !== undefined}
@@ -125,25 +126,29 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
 
         <div className='form-row'>
           <OptionalInput
-            className='offset-value-input'
+            className='skip-ratio-input'
             type='number'
-            label={`${t.minOffset}:`}
-            value={timeOffset.minOffset}
-            onChange={(value) => handleChange({ minOffset: value === undefined ? undefined : parseFloat(value) })}
+            label={`${t.bPrevSkipRatio}:`}
+            value={collision.bPrevSkipRatio}
+            min={0}
+            max={100}
+            onChange={(value) => handleChange({ bPrevSkipRatio: value === undefined ? undefined : parseFloat(value) })}
             defaultDefinedValue={'0'}
-            invalid={offsetError !== undefined || minOffsetError !== undefined}
-            errorMessage={offsetError ?? minOffsetError}
+            invalid={bPrevError !== undefined}
+            errorMessage={bPrevError}
           />
 
           <OptionalInput
-            className='offset-value-input'
+            className='skip-ratio-input'
             type='number'
-            label={`${t.maxOffset}:`}
-            value={timeOffset.maxOffset}
-            onChange={(value) => handleChange({ maxOffset: value === undefined ? undefined : parseFloat(value) })}
+            label={`${t.bNextSkipRatio}:`}
+            value={collision.bNextSkipRatio}
+            min={0}
+            max={100}
+            onChange={(value) => handleChange({ bNextSkipRatio: value === undefined ? undefined : parseFloat(value) })}
             defaultDefinedValue={'0'}
-            invalid={offsetError !== undefined || maxOffsetError !== undefined}
-            errorMessage={offsetError ?? maxOffsetError}
+            invalid={bNextError !== undefined}
+            errorMessage={bNextError}
           />
         </div>
       </div>

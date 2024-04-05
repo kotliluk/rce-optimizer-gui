@@ -1,0 +1,74 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.collisions-form {
+  padding: 0 2rem;
+  width: 100%;
+
+  .collision-form {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: $border-radius;
+
+    @include themed() {
+      border: 2px solid t($secondary-color);
+    }
+
+    .collision-form-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .collision-form-title {
+        flex-grow: 1;
+      }
+    }
+
+    &.body-hidden {
+      .delete-btn {
+        visibility: hidden;
+      }
+
+      .collision-form-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+    }
+
+    &.body-opened {
+      .delete-btn {
+        visibility: visible;
+      }
+
+      .collision-form-body {
+        max-height: 200px;
+        overflow: visible;
+        transition: max-height 0.3s ease-in;
+      }
+    }
+
+    .id-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+
+      .id-label {
+        margin-right: 0.5rem;
+      }
+    }
+
+    .skip-ratio-input {
+      .__input-wrapper {
+        width: 5rem;
+        max-width: 5rem;
+
+        .__input {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

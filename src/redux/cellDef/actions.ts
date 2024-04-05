@@ -4,11 +4,13 @@ import { CellInfo } from '../../types/cellInfo'
 import { RobotInfo } from '../../types/robot'
 import { Activity } from '../../types/activity'
 import { TimeOffset } from '../../types/timeOffset'
+import { Collision } from '../../types/collision'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
 | AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
 | AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo
+| AddCollision| DeleteCollision | SetCollisionInfo
 
 
 /** ******************* Set cell info *********************/
@@ -176,7 +178,7 @@ export const addTimeOffset = (): AddTimeOffset => {
   }
 }
 
-/** ******************* Delete timeOffset *********************/
+/** ******************* Delete time offset *********************/
 
 export const DELETE_TIME_OFFSET = 'cellDef/DELETE_TIME_OFFSET'
 
@@ -195,7 +197,7 @@ export const deleteTimeOffset = (timeOffsetUuid: string): DeleteTimeOffset => {
   }
 }
 
-/** ******************* Set timeOffset info *********************/
+/** ******************* Set time offset *********************/
 
 export const SET_TIME_OFFSET_INFO = 'cellDef/SET_TIME_OFFSET_INFO'
 
@@ -210,6 +212,59 @@ export const setTimeOffsetInfo = (timeOffset: TimeOffset): SetTimeOffsetInfo => 
     type: SET_TIME_OFFSET_INFO,
     payload: {
       timeOffset,
+    },
+  }
+}
+
+/** ******************* Add collision *********************/
+
+export const ADD_COLLISION = 'cellDef/ADD_COLLISION'
+
+interface AddCollision extends Action<typeof ADD_COLLISION> {
+  payload: undefined
+}
+
+export const addCollision = (): AddCollision => {
+  return {
+    type: ADD_COLLISION,
+    payload: undefined,
+  }
+}
+
+/** ******************* Delete collision *********************/
+
+export const DELETE_COLLISION = 'cellDef/DELETE_COLLISION'
+
+interface DeleteCollision extends Action<typeof DELETE_COLLISION> {
+  payload: {
+    collisionUuid: string,
+  }
+}
+
+export const deleteCollision = (collisionUuid: string): DeleteCollision => {
+  return {
+    type: DELETE_COLLISION,
+    payload: {
+      collisionUuid,
+    },
+  }
+}
+
+/** ******************* Set collision *********************/
+
+export const SET_COLLISION_INFO = 'cellDef/SET_COLLISION_INFO'
+
+interface SetCollisionInfo extends Action<typeof SET_COLLISION_INFO> {
+  payload: {
+    collision: Collision,
+  }
+}
+
+export const setCollisionInfo = (collision: Collision): SetCollisionInfo => {
+  return {
+    type: SET_COLLISION_INFO,
+    payload: {
+      collision,
     },
   }
 }

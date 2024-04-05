@@ -2,14 +2,17 @@ import { initialState, State } from './state'
 import {
   Actions,
   ADD_ACTIVITY,
+  ADD_COLLISION,
   ADD_ROBOT,
   ADD_TIME_OFFSET,
   CHECK_ROBOTS,
   DELETE_ACTIVITY,
+  DELETE_COLLISION,
   DELETE_ROBOT,
   DELETE_TIME_OFFSET,
   SET_ACTIVITY_INFO,
   SET_CELL_INFO,
+  SET_COLLISION_INFO,
   SET_ROBOT_INFO,
   SET_TIME_OFFSET_INFO,
 } from './actions'
@@ -17,6 +20,7 @@ import { newRobot } from '../../types/robot'
 import { ActivityShort, newIdleActivity, newMovementActivity, newWorkActivity } from '../../types/activity'
 import { getDuplicates } from '../../utils/array'
 import { newTimeOffset } from '../../types/timeOffset'
+import { newCollision } from '../../types/collision'
 
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -184,6 +188,27 @@ export function reducer (state = initialState, action: Actions): State {
       return {
         ...state,
         timeOffsets: state.timeOffsets.map((to) => to.uuid === timeOffset.uuid ? timeOffset : to),
+      }
+    }
+
+    case ADD_COLLISION:
+      return {
+        ...state,
+        collisions: [...state.collisions, newCollision()],
+      }
+
+    case DELETE_COLLISION:
+      return {
+        ...state,
+        collisions: state.collisions.filter((c) => c.uuid !== action.payload.collisionUuid),
+      }
+
+    case SET_COLLISION_INFO: {
+      const collision = action.payload.collision
+
+      return {
+        ...state,
+        collisions: state.collisions.map((c) => c.uuid === collision.uuid ? collision : c),
       }
     }
 
