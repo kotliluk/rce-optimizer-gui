@@ -3,6 +3,7 @@ import { CellInfo } from '../../types/cellInfo'
 import { Robot } from '../../types/robot'
 import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
+import { ActivityShort } from '../../types/activity'
 
 
 export const selectCellInfo = (state: RootState): CellInfo => {
@@ -19,4 +20,8 @@ export const selectTimeOffsets = (state: RootState): TimeOffset[] => {
 
 export const selectCollisions = (state: RootState): Collision[] => {
   return state.cellDef.collisions
+}
+
+export const selectActivities = (state: RootState): ActivityShort[] => {
+  return state.cellDef.activities
 }

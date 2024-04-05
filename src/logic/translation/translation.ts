@@ -64,5 +64,16 @@ export interface Translation {
         errorBothFixedUsedInMovement: string,
       },
     },
+    timeOffsets: {
+      timeOffsetsLabel: string,
+      addTimeOffsetBtn: string,
+      timeOffsetLabel: string,
+      aId: string,
+      bId: string,
+      minOffset: string,
+      maxOffset: string,
+      errorSameIds: string,
+      errorMinMaxOffsetsOrder: string,
+    },
   }
 }

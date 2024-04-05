@@ -2,6 +2,7 @@ import { newRobot, Robot } from '../../types/robot'
 import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
 import { CellInfo } from '../../types/cellInfo'
+import { ActivityShort } from '../../types/activity'
 
 
 export interface State {
@@ -10,6 +11,7 @@ export interface State {
   timeOffsets: TimeOffset[]
   collisions: Collision[]
   checked: 'NO' | 'OK' | 'ERROR'
+  activities: ActivityShort[]
 }
 
 export const initialState: State = {
@@ -24,4 +26,5 @@ export const initialState: State = {
   timeOffsets: [],
   collisions: [],
   checked: 'NO',
+  activities: [],
 }

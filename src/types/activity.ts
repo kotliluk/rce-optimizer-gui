@@ -31,6 +31,13 @@ export type WorkActivity = ActivityCommon<'WORK'> & {
 
 export type Activity = IdleActivity | MovementActivity | WorkActivity
 
+export type ActivityShort = {
+  uuid: string,
+  robotId: string,
+  id: string,
+  text: string,
+}
+
 export const newIdleActivity = (): IdleActivity => {
   return {
     uuid: uuidV4(),

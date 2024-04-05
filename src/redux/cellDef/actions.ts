@@ -3,10 +3,12 @@ import { Action } from 'redux'
 import { CellInfo } from '../../types/cellInfo'
 import { RobotInfo } from '../../types/robot'
 import { Activity } from '../../types/activity'
+import { TimeOffset } from '../../types/timeOffset'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
 | AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
+| AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo
 
 
 /** ******************* Set cell info *********************/
@@ -159,3 +161,55 @@ export const checkRobots = (): CheckRobots => {
   }
 }
 
+/** ******************* Add time offset *********************/
+
+export const ADD_TIME_OFFSET = 'cellDef/ADD_TIME_OFFSET'
+
+interface AddTimeOffset extends Action<typeof ADD_TIME_OFFSET> {
+  payload: undefined
+}
+
+export const addTimeOffset = (): AddTimeOffset => {
+  return {
+    type: ADD_TIME_OFFSET,
+    payload: undefined,
+  }
+}
+
+/** ******************* Delete timeOffset *********************/
+
+export const DELETE_TIME_OFFSET = 'cellDef/DELETE_TIME_OFFSET'
+
+interface DeleteTimeOffset extends Action<typeof DELETE_TIME_OFFSET> {
+  payload: {
+    timeOffsetUuid: string,
+  }
+}
+
+export const deleteTimeOffset = (timeOffsetUuid: string): DeleteTimeOffset => {
+  return {
+    type: DELETE_TIME_OFFSET,
+    payload: {
+      timeOffsetUuid,
+    },
+  }
+}
+
+/** ******************* Set timeOffset info *********************/
+
+export const SET_TIME_OFFSET_INFO = 'cellDef/SET_TIME_OFFSET_INFO'
+
+interface SetTimeOffsetInfo extends Action<typeof SET_TIME_OFFSET_INFO> {
+  payload: {
+    timeOffset: TimeOffset,
+  }
+}
+
+export const setTimeOffsetInfo = (timeOffset: TimeOffset): SetTimeOffsetInfo => {
+  return {
+    type: SET_TIME_OFFSET_INFO,
+    payload: {
+      timeOffset,
+    },
+  }
+}

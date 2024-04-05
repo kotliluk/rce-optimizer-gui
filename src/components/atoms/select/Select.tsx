@@ -4,9 +4,14 @@ import React from 'react'
 import './Select.scss'
 
 
+export interface SelectValue {
+  value: string
+  text: string
+}
+
 interface SelectProps {
   selected: string
-  values: { value: string, text: string }[]
+  values: SelectValue[]
   onChange: (value: string) => void
   id?: string
   className?: string

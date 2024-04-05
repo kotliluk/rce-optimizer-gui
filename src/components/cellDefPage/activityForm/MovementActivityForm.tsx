@@ -6,9 +6,9 @@ import { Activity, MovementActivity, newWorkActivity } from '../../../types/acti
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
-import { CheckBox } from '../../atoms/checkBox/CheckBox'
 import { useMinMaxDurationValidator } from '../hooks/useMinMaxDurationValidator'
 import { isDefNaN } from '../../../utils/number'
+import { OptionalInput } from '../../atoms/input/OptionalInput'
 
 
 interface ActivityFormProps {
@@ -91,45 +91,35 @@ export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
         </div>
 
         <div className='form-row'>
-          <div className='fixed-time-input'>
-            <span>{t.fixedStartTime}:</span>
-            <CheckBox
-              checked={fixedStartTime !== undefined}
-              onChange={checked => handleChange(
-                checked ? { fixedStartTime: 0, fixedEndTime: undefined } : { fixedStartTime: undefined }
-              )}
-            />
-            {fixedStartTime !== undefined && (
-              <Input
-                type='number'
-                min={0}
-                value={fixedStartTime}
-                onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
-                invalid={fixedStartError !== undefined}
-                errorMessage={fixedStartError}
-              />
+          <OptionalInput
+            className='fixed-time-input'
+            type='number'
+            label={`${t.fixedStartTime}:`}
+            min={0}
+            value={fixedStartTime}
+            onChange={(value) => handleChange(value === undefined
+              ? { fixedStartTime: undefined }
+              : { fixedStartTime: parseFloat(value), fixedEndTime: undefined }
             )}
-          </div>
+            defaultDefinedValue={'0'}
+            invalid={fixedStartError !== undefined}
+            errorMessage={fixedStartError}
+          />
 
-          <div className='fixed-time-input'>
-            <span>{t.fixedEndTime}:</span>
-            <CheckBox
-              checked={fixedEndTime !== undefined}
-              onChange={checked => handleChange(
-                checked ? { fixedEndTime: 0, fixedStartTime: undefined } : { fixedEndTime: undefined }
-              )}
-            />
-            {fixedEndTime !== undefined && (
-              <Input
-                type='number'
-                min={0}
-                value={fixedEndTime}
-                onChange={fixedEndTime => handleChange({ fixedEndTime: parseFloat(fixedEndTime) })}
-                invalid={fixedEndError !== undefined}
-                errorMessage={fixedEndError}
-              />
+          <OptionalInput
+            className='fixed-time-input'
+            type='number'
+            label={`${t.fixedEndTime}:`}
+            min={0}
+            value={fixedEndTime}
+            onChange={(value) => handleChange(value === undefined
+              ? { fixedEndTime: undefined }
+              : { fixedEndTime: parseFloat(value), fixedStartTime: undefined }
             )}
-          </div>
+            defaultDefinedValue={'0'}
+            invalid={fixedEndError !== undefined}
+            errorMessage={fixedEndError}
+          />
         </div>
 
         <div className='form-row'>

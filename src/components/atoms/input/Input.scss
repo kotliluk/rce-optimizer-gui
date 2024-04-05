@@ -54,3 +54,17 @@
     }
   }
 }
+
+.optional-input {
+  flex: 1 0 0;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  .__checkbox_container {
+    display: inline-block;
+    margin: 0.5rem;
+  }
+}

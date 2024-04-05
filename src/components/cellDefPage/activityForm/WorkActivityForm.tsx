@@ -6,8 +6,8 @@ import { Activity, newMovementActivity, WorkActivity } from '../../../types/acti
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
-import { CheckBox } from '../../atoms/checkBox/CheckBox'
 import { isDefNaN } from '../../../utils/number'
+import { OptionalInput } from '../../atoms/input/OptionalInput'
 
 
 interface ActivityFormProps {
@@ -71,23 +71,17 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
         </div>
 
         <div className='form-row'>
-          <div className='fixed-time-input'>
-            <span>{t.fixedStartTime}:</span>
-            <CheckBox
-              checked={fixedStartTime !== undefined}
-              onChange={checked => handleChange({ fixedStartTime: checked ? 0 : undefined })}
-            />
-            {fixedStartTime !== undefined && (
-              <Input
-                type='number'
-                min={0}
-                value={fixedStartTime}
-                onChange={fixedStartTime => handleChange({ fixedStartTime: parseFloat(fixedStartTime) })}
-                invalid={fixedStartError !== undefined}
-                errorMessage={fixedStartError}
-              />
-            )}
-          </div>
+          <OptionalInput
+            className='fixed-time-input'
+            type='number'
+            label={`${t.fixedStartTime}:`}
+            min={0}
+            value={fixedStartTime}
+            onChange={(value) => handleChange({ fixedStartTime: value === undefined ? undefined : parseFloat(value) })}
+            defaultDefinedValue={'0'}
+            invalid={fixedStartError !== undefined}
+            errorMessage={fixedStartError}
+          />
         </div>
 
         <div className='form-row'>

@@ -1,42 +1,36 @@
 @import 'src/styles/variables';
 @import 'src/styles/theme';
 
-.activities-form {
-  .activity-form {
+.time-offsets-form {
+  padding: 0 2rem;
+  width: 100%;
+
+  .time-offset-form {
+    width: 100%;
     padding: 0.5rem;
     border-radius: $border-radius;
 
     @include themed() {
-      &.idle {
-        background: t($idle-activity-background);
-      }
-
-      &.work {
-        background: t($work-activity-background);
-      }
-
-      &.movement {
-        background: t($movement-activity-background);
-      }
+      border: 2px solid t($secondary-color);
     }
 
-    .activity-form-header {
+    .time-offset-form-header {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
 
-      .activity-form-title {
+      .time-offset-form-title {
         flex-grow: 1;
       }
     }
 
     &.body-hidden {
-      .delete-btn, .text-btn {
+      .delete-btn {
         visibility: hidden;
       }
 
-      .activity-form-body {
+      .time-offset-form-body {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease-out;
@@ -44,38 +38,29 @@
     }
 
     &.body-opened {
-      .delete-btn, .text-btn {
+      .delete-btn {
         visibility: visible;
       }
 
-      .activity-form-body {
-        max-height: 300px;
+      .time-offset-form-body {
+        max-height: 200px;
         overflow: visible;
         transition: max-height 0.3s ease-in;
       }
     }
 
-    .position-input {
+    .id-wrapper {
       display: flex;
       flex-direction: row;
+      justify-content: flex-start;
       align-items: center;
-      flex-grow: 1;
 
-      .__input-wrapper {
-        width: 5rem;
-        max-width: 5rem;
-
-        .__input {
-          width: 100%;
-        }
+      .id-label {
+        margin-right: 0.5rem;
       }
     }
 
-    .duration-input {
-      width: 4rem;
-    }
-
-    .fixed-time-input {
+    .offset-value-input {
       .__input-wrapper {
         width: 5rem;
         max-width: 5rem;

@@ -6,6 +6,7 @@ import { useSelector } from '../../redux/useSelector'
 import { selectTranslation } from '../../redux/page/selector'
 import { CellInfoForm } from '../../components/cellDefPage/cellInfoForm/CellInfoForm'
 import { RobotsForm } from '../../components/cellDefPage/robotForm/RobotsForm'
+import { TimeOffsetsForm } from '../../components/cellDefPage/timeOffsetForm/TimeOffsetsForm'
 
 
 export const CellDefPage = (): JSX.Element => {
@@ -16,6 +17,7 @@ export const CellDefPage = (): JSX.Element => {
       <h1>{t.title}</h1>
       <CellInfoForm />
       <RobotsForm />
+      <TimeOffsetsForm />
     </main>
   )
 }

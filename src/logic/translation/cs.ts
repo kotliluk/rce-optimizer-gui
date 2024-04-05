@@ -61,5 +61,16 @@ export const CS: Translation = {
         errorBothFixedUsedInMovement: 'Použijte "Práci" pro nastavení obou fixních časů',
       },
     },
+    timeOffsets: {
+      timeOffsetsLabel: 'Časové návaznosti',
+      addTimeOffsetBtn: 'Přidat návaznost',
+      timeOffsetLabel: 'Časová návaznost',
+      aId: 'Aktivita 1',
+      bId: 'Aktivita 2',
+      minOffset: 'Min čas',
+      maxOffset: 'Max čas',
+      errorSameIds: 'Aktivity musí být různé',
+      errorMinMaxOffsetsOrder: 'Min čas je větší než max čas',
+    },
   },
 }

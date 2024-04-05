@@ -3,16 +3,20 @@ import {
   Actions,
   ADD_ACTIVITY,
   ADD_ROBOT,
+  ADD_TIME_OFFSET,
   CHECK_ROBOTS,
   DELETE_ACTIVITY,
   DELETE_ROBOT,
+  DELETE_TIME_OFFSET,
   SET_ACTIVITY_INFO,
   SET_CELL_INFO,
   SET_ROBOT_INFO,
+  SET_TIME_OFFSET_INFO,
 } from './actions'
 import { newRobot } from '../../types/robot'
-import { newIdleActivity, newMovementActivity, newWorkActivity } from '../../types/activity'
+import { ActivityShort, newIdleActivity, newMovementActivity, newWorkActivity } from '../../types/activity'
 import { getDuplicates } from '../../utils/array'
+import { newTimeOffset } from '../../types/timeOffset'
 
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -76,6 +80,7 @@ export function reducer (state = initialState, action: Actions): State {
     case DELETE_ACTIVITY: {
       const { activityUuid, robotUuid } = action.payload
       const uuid1 = activityUuid
+      let uuid2: string
 
       return {
         ...state,
@@ -85,13 +90,18 @@ export function reducer (state = initialState, action: Actions): State {
           }
 
           const activityIndex = robot.activities.findIndex((a) => a.uuid === uuid1)
-          const uuid2 = robot.activities[activityIndex + 1].uuid
+          uuid2 = robot.activities[activityIndex + 1].uuid
 
           return {
             ...robot,
             activities: robot.activities.filter((a) => a.uuid !== uuid1 && a.uuid !== uuid2),
           }
         }),
+        timeOffsets: state.timeOffsets.map((to) => ({
+          ...to,
+          aUuid: (to.aUuid === uuid1 || to.aUuid === uuid2) ? '-' : to.aUuid,
+          bUuid: (to.bUuid === uuid1 || to.bUuid === uuid2) ? '-' : to.bUuid,
+        })),
         checked: 'NO',
       }
     }
@@ -124,30 +134,56 @@ export function reducer (state = initialState, action: Actions): State {
       const emptyActivityId = allActivities.find((a) => a.id === '')
       const duplicatedActivities = getDuplicates(allActivities, (a, b) => a.id !== '' && a.id === b.id)
         .map((a) => a.uuid)
+      const robots = state.robots.map((robot) => {
+        const duplicatedRobotId = duplicatedRobots.includes(robot.uuid)
+        return {
+          ...robot,
+          duplicatedId: duplicatedRobotId,
+          activities: robot.activities.map((a) => {
+            const duplicatedActivityId = duplicatedActivities.includes(a.uuid)
+            return {
+              ...a,
+              duplicatedId: duplicatedActivityId,
+            }
+          }),
+        }
+      })
       const checked = (!emptyRobotId && duplicatedRobots.length === 0
           && !emptyActivityId && duplicatedActivities.length === 0)
         ? 'OK'
         : 'ERROR'
-
-      console.log(`Check robots: ${checked}`)
+      const activities: ActivityShort[] = checked === 'OK'
+        ? robots.map((r) => r.activities.map(
+          ({ uuid, id }) => ({ uuid, id, robotId: r.id, text: `${r.id}: ${id}` }))
+        ).flat()
+        : []
 
       return {
         ...state,
-        robots: state.robots.map((robot) => {
-          const duplicatedRobotId = duplicatedRobots.includes(robot.uuid)
-          return {
-            ...robot,
-            duplicatedId: duplicatedRobotId,
-            activities: robot.activities.map((a) => {
-              const duplicatedActivityId = duplicatedActivities.includes(a.uuid)
-              return {
-                ...a,
-                duplicatedId: duplicatedActivityId,
-              }
-            }),
-          }
-        }),
+        robots,
         checked,
+        activities,
+      }
+    }
+
+    case ADD_TIME_OFFSET:
+      return {
+        ...state,
+        timeOffsets: [...state.timeOffsets, newTimeOffset()],
+      }
+
+    case DELETE_TIME_OFFSET:
+      return {
+        ...state,
+        timeOffsets: state.timeOffsets.filter((to) => to.uuid !== action.payload.timeOffsetUuid),
+      }
+
+    case SET_TIME_OFFSET_INFO: {
+      const timeOffset = action.payload.timeOffset
+
+      return {
+        ...state,
+        timeOffsets: state.timeOffsets.map((to) => to.uuid === timeOffset.uuid ? timeOffset : to),
       }
     }
 
