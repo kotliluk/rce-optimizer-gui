@@ -3,14 +3,17 @@ import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
 import { CellInfo } from '../../types/cellInfo'
 import { ActivityShort } from '../../types/activity'
+import { CheckState } from '../../types/checkState'
 
 
 export interface State {
   cellInfo: CellInfo
   robots: Robot[]
+  robotsChecked: CheckState
   timeOffsets: TimeOffset[]
+  timeOffsetsChecked: CheckState
   collisions: Collision[]
-  checked: 'NO' | 'OK' | 'ERROR'
+  collisionsChecked: CheckState
   activities: ActivityShort[]
 }
 
@@ -23,8 +26,10 @@ export const initialState: State = {
   robots: [
     newRobot(),
   ],
+  robotsChecked: 'NO',
   timeOffsets: [],
+  timeOffsetsChecked: 'NO',
   collisions: [],
-  checked: 'NO',
+  collisionsChecked: 'NO',
   activities: [],
 }

@@ -9,8 +9,8 @@ import { Collision } from '../../types/collision'
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
 | AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
-| AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo
-| AddCollision| DeleteCollision | SetCollisionInfo
+| AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo | CheckTimeOffsets
+| AddCollision | DeleteCollision | SetCollisionInfo | CheckCollisions
 
 
 /** ******************* Set cell info *********************/
@@ -216,6 +216,21 @@ export const setTimeOffsetInfo = (timeOffset: TimeOffset): SetTimeOffsetInfo => 
   }
 }
 
+/** ******************* Check time offsets *********************/
+
+export const CHECK_TIME_OFFSETS = 'cellDef/CHECK_TIME_OFFSETS'
+
+interface CheckTimeOffsets extends Action<typeof CHECK_TIME_OFFSETS> {
+  payload: undefined
+}
+
+export const checkTimeOffsets = (): CheckTimeOffsets => {
+  return {
+    type: CHECK_TIME_OFFSETS,
+    payload: undefined,
+  }
+}
+
 /** ******************* Add collision *********************/
 
 export const ADD_COLLISION = 'cellDef/ADD_COLLISION'
@@ -266,5 +281,20 @@ export const setCollisionInfo = (collision: Collision): SetCollisionInfo => {
     payload: {
       collision,
     },
+  }
+}
+
+/** ******************* Check collisions *********************/
+
+export const CHECK_COLLISIONS = 'cellDef/CHECK_COLLISIONS'
+
+interface CheckCollisions extends Action<typeof CHECK_COLLISIONS> {
+  payload: undefined
+}
+
+export const checkCollisions = (): CheckCollisions => {
+  return {
+    type: CHECK_COLLISIONS,
+    payload: undefined,
   }
 }

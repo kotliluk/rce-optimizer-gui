@@ -32,7 +32,11 @@ export const EN: Translation = {
     robots: {
       robotsLabel: 'Robots',
       addRobotBtn: 'Add robot',
-      checkRobotsBtn: 'Check robots',
+      checkRobotsBtn: {
+        NO: 'Check robots',
+        OK: 'Data OK',
+        ERROR: 'Fix errors',
+      },
       robotLabel: 'Robot',
       id: 'Id',
       note: 'Note',
@@ -66,6 +70,11 @@ export const EN: Translation = {
     timeOffsets: {
       timeOffsetsLabel: 'Time offsets',
       addTimeOffsetBtn: 'Add time offset',
+      checkTimeOffsetsBtn: {
+        NO: 'Check offsets',
+        OK: 'Data OK',
+        ERROR: 'Fix errors',
+      },
       timeOffsetLabel: 'Time offset',
       aId: 'Activity A',
       bId: 'Activity B',
@@ -78,6 +87,11 @@ export const EN: Translation = {
     collisions: {
       collisionsLabel: 'Collisions',
       addCollisionBtn: 'Add collision',
+      checkCollisionsBtn: {
+        NO: 'Check collision',
+        OK: 'Data OK',
+        ERROR: 'Fix errors',
+      },
       collisionLabel: 'Collision',
       aId: 'Activity A',
       bId: 'Activity B',

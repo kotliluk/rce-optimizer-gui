@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 
 import './RobotsForm.scss'
 import { useSelector } from '../../../redux/useSelector'
-import { selectRobots } from '../../../redux/cellDef/selector'
+import { selectRobotsChecked, selectRobots } from '../../../redux/cellDef/selector'
 import { RobotForm } from './RobotForm'
 import { Button } from '../../atoms/button/Button'
 import { useDispatch } from '../../../redux/useDispatch'
@@ -15,6 +15,7 @@ export const RobotsForm = (): JSX.Element => {
   const { cellDefPage: { robots: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()
   const robots = useSelector(selectRobots)
+  const robotsChecked = useSelector(selectRobotsChecked)
 
   const handleAddNewRobot = useCallback(() => {
     dispatch(addRobot())
@@ -34,11 +35,18 @@ export const RobotsForm = (): JSX.Element => {
         />
       ))}
       <div className='btns-row'>
-        <Button onClick={handleAddNewRobot}>
+        <Button
+          className='text-btn'
+          onClick={handleAddNewRobot}
+        >
           {t.addRobotBtn}
         </Button>
-        <Button onClick={handleCheckRobots}>
-          {t.checkRobotsBtn}
+        <Button
+          className={`text-btn check-btn check-${robotsChecked}`}
+          onClick={handleCheckRobots}
+          disabled={robotsChecked !== 'NO'}
+        >
+          {t.checkRobotsBtn[robotsChecked]}
         </Button>
       </div>
     </div>

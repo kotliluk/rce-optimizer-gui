@@ -3,11 +3,11 @@ import React, { useCallback } from 'react'
 
 import './TimeOffsetsForm.scss'
 import { useSelector } from '../../../redux/useSelector'
-import { selectTimeOffsets } from '../../../redux/cellDef/selector'
+import { selectTimeOffsetsChecked, selectTimeOffsets } from '../../../redux/cellDef/selector'
 import { TimeOffsetForm } from './TimeOffsetForm'
 import { Button } from '../../atoms/button/Button'
 import { useDispatch } from '../../../redux/useDispatch'
-import { addTimeOffset } from '../../../redux/cellDef/actions'
+import { addTimeOffset, checkTimeOffsets } from '../../../redux/cellDef/actions'
 import { selectTranslation } from '../../../redux/page/selector'
 
 
@@ -15,9 +15,14 @@ export const TimeOffsetsForm = (): JSX.Element => {
   const { cellDefPage: { timeOffsets: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()
   const timeOffsets = useSelector(selectTimeOffsets)
+  const timeOffsetsChecked = useSelector(selectTimeOffsetsChecked)
 
   const handleAddNewTimeOffset = useCallback(() => {
     dispatch(addTimeOffset())
+  }, [])
+
+  const handleCheckTimeOffsets = useCallback(() => {
+    dispatch(checkTimeOffsets())
   }, [])
 
   return (
@@ -30,8 +35,18 @@ export const TimeOffsetsForm = (): JSX.Element => {
         />
       ))}
       <div className='btns-row'>
-        <Button onClick={handleAddNewTimeOffset}>
+        <Button
+          className='text-btn'
+          onClick={handleAddNewTimeOffset}
+        >
           {t.addTimeOffsetBtn}
+        </Button>
+        <Button
+          className={`text-btn check-btn check-${timeOffsetsChecked}`}
+          onClick={handleCheckTimeOffsets}
+          disabled={timeOffsetsChecked !== 'NO'}
+        >
+          {t.checkTimeOffsetsBtn[timeOffsetsChecked]}
         </Button>
       </div>
     </div>

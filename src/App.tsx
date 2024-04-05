@@ -9,7 +9,7 @@ import { selectTheme } from './redux/page/selector'
 import { CellDefPage } from './pages/cellDef/CellDefPage'
 
 
-// TODO - style, translations
+// TODO - require OK robots before time offsets/collisions
 // TODO - JSON parsing
 // TODO - connect to server API
 

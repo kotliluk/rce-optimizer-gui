@@ -35,7 +35,11 @@ export interface Translation {
     robots: {
       robotsLabel: string,
       addRobotBtn: string,
-      checkRobotsBtn: string,
+      checkRobotsBtn: {
+        NO: string,
+        OK: string,
+        ERROR: string,
+      },
       robotLabel: string,
       id: string,
       note: string,
@@ -69,6 +73,11 @@ export interface Translation {
     timeOffsets: {
       timeOffsetsLabel: string,
       addTimeOffsetBtn: string,
+      checkTimeOffsetsBtn: {
+        NO: string,
+        OK: string,
+        ERROR: string,
+      },
       timeOffsetLabel: string,
       aId: string,
       bId: string,
@@ -81,6 +90,11 @@ export interface Translation {
     collisions: {
       collisionsLabel: string,
       addCollisionBtn: string,
+      checkCollisionsBtn: {
+        NO: string,
+        OK: string,
+        ERROR: string,
+      },
       collisionLabel: string,
       aId: string,
       bId: string,

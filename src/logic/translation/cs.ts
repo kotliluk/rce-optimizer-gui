@@ -32,7 +32,11 @@ export const CS: Translation = {
     robots: {
       robotsLabel: 'Roboty',
       addRobotBtn: 'Přidat robota',
-      checkRobotsBtn: 'Kontrola robotů',
+      checkRobotsBtn: {
+        NO: 'Kontrola robotů',
+        OK: 'Data jsou OK',
+        ERROR: 'Opravte chyby',
+      },
       robotLabel: 'Robot',
       id: 'Id',
       note: 'Poznámka',
@@ -66,6 +70,11 @@ export const CS: Translation = {
     timeOffsets: {
       timeOffsetsLabel: 'Časové návaznosti',
       addTimeOffsetBtn: 'Přidat návaznost',
+      checkTimeOffsetsBtn: {
+        NO: 'Kontrola návazností',
+        OK: 'Data jsou OK',
+        ERROR: 'Opravte chyby',
+      },
       timeOffsetLabel: 'Časová návaznost',
       aId: 'Aktivita A',
       bId: 'Aktivita B',
@@ -78,6 +87,11 @@ export const CS: Translation = {
     collisions: {
       collisionsLabel: 'Kolize',
       addCollisionBtn: 'Přidat kolizi',
+      checkCollisionsBtn: {
+        NO: 'Kontrola kolizí',
+        OK: 'Data jsou OK',
+        ERROR: 'Opravte chyby',
+      },
       collisionLabel: 'Kolize',
       aId: 'Aktivita A',
       bId: 'Aktivita B',
