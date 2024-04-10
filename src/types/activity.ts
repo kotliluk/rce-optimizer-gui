@@ -12,8 +12,6 @@ type ActivityCommon<T extends string> = {
 }
 
 export type IdleActivity = ActivityCommon<'IDLE'> & {
-  minDuration: number,
-  maxDuration: number,
   position: Position,
 }
 
@@ -44,8 +42,6 @@ export const newIdleActivity = (): IdleActivity => {
     type: 'IDLE',
     id: '',
     note: '',
-    minDuration: 1,
-    maxDuration: 5,
     position: { x: 0, y: 0, z: 0 },
     duplicatedId: false,
   }
@@ -75,4 +71,15 @@ export const newWorkActivity = (uuid?: string): WorkActivity => {
     fixedStartTime: undefined,
     duplicatedId: false,
   }
+}
+
+export const getMinDuration = (a: Activity): number => {
+  if (a.type === 'IDLE') {
+    return 0
+  }
+  if (a.type === 'MOVEMENT') {
+    return a.minDuration
+  }
+  // if (a.type === 'WORK')
+  return a.duration
 }

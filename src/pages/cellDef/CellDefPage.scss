@@ -72,16 +72,16 @@
       background: t($secondary-color);
       color: t($primary-text);
 
-      &:hover {
+      &:hover, &:disabled {
         background: t($primary-color);
       }
     }
 
-    &.check-OK, &.check-OK:hover {
+    &.check-OK, &.check-OK:disabled {
       background: $green;
     }
 
-    &.check-ERROR, &.check-ERROR:hover {
+    &.check-ERROR, &.check-ERROR:disabled {
       background: $red;
     }
   }

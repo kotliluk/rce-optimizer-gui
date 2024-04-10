@@ -100,5 +100,16 @@ export const CS: Translation = {
       errorSameRobotIds: 'Roboty aktivit musí být různé',
       errorNegativeSkipRatio: 'Záporné skip ratio',
     },
+    cellDefControl: {
+      checkAll: 'Kontrola všeho',
+      createJSON: 'Vytvořit JSON',
+      downloadJSON: 'Stáhnout JSON',
+      sendToServer: 'Optimalizovat',
+      errorRobotCheck: 'Chyba v definicích robotů',
+      errorTimeOffsetsCheck: 'Chyba v návaznostech',
+      errorCollisionsCheck: 'Chyba v kolizích',
+      errorActivityOrder: 'Chyba v pořadí aktivit u robota: ',
+      errorMinDuration: 'Minimální doba trvání aktivit je delší než cyklus buňky u robota: ',
+    },
   },
 }

@@ -6,6 +6,7 @@ import {
   ADD_ROBOT,
   ADD_TIME_OFFSET,
   CHECK_COLLISIONS,
+  CHECK_EXTRA,
   CHECK_ROBOTS,
   CHECK_TIME_OFFSETS,
   DELETE_ACTIVITY,
@@ -18,8 +19,14 @@ import {
   SET_ROBOT_INFO,
   SET_TIME_OFFSET_INFO,
 } from './actions'
-import { newRobot } from '../../types/robot'
-import { ActivityShort, newIdleActivity, newMovementActivity, newWorkActivity } from '../../types/activity'
+import { hasActivityOrderError, newRobot } from '../../types/robot'
+import {
+  ActivityShort,
+  getMinDuration,
+  newIdleActivity,
+  newMovementActivity,
+  newWorkActivity,
+} from '../../types/activity'
 import { getDuplicates } from '../../utils/array'
 import { newTimeOffset } from '../../types/timeOffset'
 import { newCollision } from '../../types/collision'
@@ -34,6 +41,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         cellInfo: action.payload.cellInfo,
         robotsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case ADD_ROBOT:
@@ -41,6 +49,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         robots: [...state.robots, newRobot()],
         robotsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case DELETE_ROBOT: {
@@ -53,6 +62,7 @@ export function reducer (state = initialState, action: Actions): State {
         robotsChecked: 'NO',
         timeOffsetsChecked: 'NO',
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
@@ -68,6 +78,7 @@ export function reducer (state = initialState, action: Actions): State {
           return robot
         }),
         robotsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
@@ -83,6 +94,7 @@ export function reducer (state = initialState, action: Actions): State {
           : r
         ),
         robotsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
@@ -111,6 +123,7 @@ export function reducer (state = initialState, action: Actions): State {
         timeOffsetsChecked: 'NO',
         collisions: state.collisions.map((c) => resetDetail(c, uuid1, uuid2)),
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
@@ -135,6 +148,7 @@ export function reducer (state = initialState, action: Actions): State {
         timeOffsetsChecked: 'NO',
         collisions: state.collisions.map((c) => updateDetail(c, activity)),
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
@@ -148,16 +162,20 @@ export function reducer (state = initialState, action: Actions): State {
         .map((a) => a.uuid)
       const robots = state.robots.map((robot) => {
         const duplicatedRobotId = duplicatedRobots.includes(robot.uuid)
+        let minActivitiesDuration = 0
+        const activities = robot.activities.map((a) => {
+          minActivitiesDuration += getMinDuration(a)
+          const duplicatedActivityId = duplicatedActivities.includes(a.uuid)
+          return {
+            ...a,
+            duplicatedId: duplicatedActivityId,
+          }
+        })
         return {
           ...robot,
           duplicatedId: duplicatedRobotId,
-          activities: robot.activities.map((a) => {
-            const duplicatedActivityId = duplicatedActivities.includes(a.uuid)
-            return {
-              ...a,
-              duplicatedId: duplicatedActivityId,
-            }
-          }),
+          activities,
+          minActivitiesDuration,
         }
       })
       const checked = (!emptyRobotId && duplicatedRobots.length === 0
@@ -183,6 +201,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         timeOffsets: [...state.timeOffsets, newTimeOffset()],
         timeOffsetsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case DELETE_TIME_OFFSET:
@@ -190,6 +209,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         timeOffsets: state.timeOffsets.filter((to) => to.uuid !== action.payload.timeOffsetUuid),
         timeOffsetsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case SET_TIME_OFFSET_INFO: {
@@ -199,10 +219,15 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         timeOffsets: state.timeOffsets.map((to) => to.uuid === timeOffset.uuid ? timeOffset : to),
         timeOffsetsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
     case CHECK_TIME_OFFSETS: {
+      if (state.robotsChecked !== 'OK') {
+        return state
+      }
+
       const error = state.timeOffsets.some(isTimeOffsetInvalid)
 
       return {
@@ -216,6 +241,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         collisions: [...state.collisions, newCollision()],
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case DELETE_COLLISION:
@@ -223,6 +249,7 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         collisions: state.collisions.filter((c) => c.uuid !== action.payload.collisionUuid),
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
 
     case SET_COLLISION_INFO: {
@@ -232,15 +259,69 @@ export function reducer (state = initialState, action: Actions): State {
         ...state,
         collisions: state.collisions.map((c) => c.uuid === collision.uuid ? collision : c),
         collisionsChecked: 'NO',
+        allChecked: 'NO',
       }
     }
 
     case CHECK_COLLISIONS: {
+      if (state.robotsChecked !== 'OK') {
+        return state
+      }
+
       const error = state.collisions.some(isCollisionInvalid)
 
       return {
         ...state,
         collisionsChecked: error ? 'ERROR' : 'OK',
+      }
+    }
+
+    case CHECK_EXTRA: {
+      if (state.robotsChecked === 'ERROR') {
+        return {
+          ...state,
+          allChecked: 'errorRobotCheck',
+        }
+      }
+
+      if (state.timeOffsetsChecked === 'ERROR') {
+        return {
+          ...state,
+          allChecked: 'errorTimeOffsetsCheck',
+        }
+      }
+
+      if (state.collisionsChecked === 'ERROR') {
+        return {
+          ...state,
+          allChecked: 'errorCollisionsCheck',
+        }
+      }
+
+      const activityOrderErrors = state.robots.filter(hasActivityOrderError)
+      if (activityOrderErrors.length > 0) {
+        const allChecked = `errorActivityOrder:${activityOrderErrors.map((r) => r.id).join(', ')}`
+        console.error(allChecked)
+        return {
+          ...state,
+          allChecked,
+        }
+      }
+
+      const minDurationErrors = state.robots.filter((r) => r.minActivitiesDuration > state.cellInfo.cycleTime)
+      if (minDurationErrors.length > 0) {
+        const info = minDurationErrors.map((r) => `${r.id} (${r.minActivitiesDuration}s)`).join(', ')
+        const allChecked = `errorMinDuration:${info}`
+        console.error(allChecked)
+        return {
+          ...state,
+          allChecked,
+        }
+      }
+
+      return {
+        ...state,
+        allChecked: 'OK',
       }
     }
 

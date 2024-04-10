@@ -100,5 +100,16 @@ export const EN: Translation = {
       errorSameRobotIds: 'Robots of activities must be different',
       errorNegativeSkipRatio: 'Negative skip ratio',
     },
+    cellDefControl: {
+      checkAll: 'Check all',
+      createJSON: 'Create JSON',
+      downloadJSON: 'Download JSON',
+      sendToServer: 'Optimize',
+      errorRobotCheck: 'Error in robot definitions',
+      errorTimeOffsetsCheck: 'Error in time offsets',
+      errorCollisionsCheck: 'Error in collisions',
+      errorActivityOrder: 'Error in activities order in robot: ',
+      errorMinDuration: 'Minimum activities duration is longer than cycle time in robot: ',
+    },
   },
 }

@@ -1,0 +1,12 @@
+@import 'src/styles/variables';
+@import 'src/styles/theme';
+
+.cell-def-control {
+  padding: 1rem 2rem;
+  width: 100%;
+  margin-top: 1rem;
+
+  @include themed() {
+    border-top: 2px solid t($secondary-color);
+  }
+}

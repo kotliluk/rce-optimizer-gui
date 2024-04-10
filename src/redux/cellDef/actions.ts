@@ -5,12 +5,14 @@ import { RobotInfo } from '../../types/robot'
 import { Activity } from '../../types/activity'
 import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
+import { ThunkAction } from '../thunk'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
 | AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
 | AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo | CheckTimeOffsets
 | AddCollision | DeleteCollision | SetCollisionInfo | CheckCollisions
+| CheckExtra
 
 
 /** ******************* Set cell info *********************/
@@ -296,5 +298,33 @@ export const checkCollisions = (): CheckCollisions => {
   return {
     type: CHECK_COLLISIONS,
     payload: undefined,
+  }
+}
+
+/** ******************* Check extra *********************/
+
+export const CHECK_EXTRA = 'cellDef/CHECK_EXTRA'
+
+interface CheckExtra extends Action<typeof CHECK_EXTRA> {
+  payload: undefined
+}
+
+export const checkExtra = (): CheckExtra => {
+  return {
+    type: CHECK_EXTRA,
+    payload: undefined,
+  }
+}
+
+/** ******************* Check all *********************/
+
+export const checkAll = (): ThunkAction => (dispatch) => {
+  try {
+    dispatch(checkRobots())
+    dispatch(checkTimeOffsets())
+    dispatch(checkCollisions())
+    dispatch(checkExtra())
+  } catch (e) {
+    console.error(e)
   }
 }

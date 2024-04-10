@@ -103,5 +103,16 @@ export interface Translation {
       errorSameRobotIds: string,
       errorNegativeSkipRatio: string,
     },
+    cellDefControl: {
+      checkAll: string,
+      createJSON: string,
+      downloadJSON: string,
+      sendToServer: string,
+      errorRobotCheck: string,
+      errorTimeOffsetsCheck: string,
+      errorCollisionsCheck: string,
+      errorActivityOrder: string,
+      errorMinDuration: string,
+    },
   }
 }

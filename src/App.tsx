@@ -10,7 +10,6 @@ import { CellDefPage } from './pages/cellDef/CellDefPage'
 
 
 // TODO - require OK robots before time offsets/collisions
-// TODO - JSON parsing
 // TODO - connect to server API
 
 const App = (): JSX.Element => {

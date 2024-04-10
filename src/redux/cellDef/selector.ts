@@ -38,3 +38,7 @@ export const selectCollisionsChecked = (state: RootState): CheckState => {
 export const selectActivities = (state: RootState): ActivityShort[] => {
   return state.cellDef.activities
 }
+
+export const selectAllChecked = (state: RootState): string => {
+  return state.cellDef.allChecked
+}

@@ -1,6 +1,22 @@
 @import 'src/styles/variables';
 @import 'src/styles/theme';
 
+.__button-wrapper {
+  position: relative;
+
+  &:hover {
+    .__error-msg {
+      display: unset;
+    }
+  }
+
+  &.invalid {
+    .__input {
+      border-color: $red;
+    }
+  }
+}
+
 .__button {
   padding: 0.5rem 1rem;
   margin: 0;

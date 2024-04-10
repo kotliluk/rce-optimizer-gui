@@ -8,6 +8,7 @@ export type Robot = {
   id: string,
   note: string,
   activities: Activity[],
+  minActivitiesDuration: number,
   duplicatedId: boolean,
 }
 
@@ -23,6 +24,19 @@ export const newRobot = (): Robot => {
       newMovementActivity(),
       newIdleActivity(),
     ],
+    minActivitiesDuration: 0,
     duplicatedId: false,
   }
+}
+
+const isUnexpectedActivityOnIndex = (a: Activity, i: number): boolean => {
+  return (i % 2 === 0) ? a.type !== 'IDLE' : a.type === 'IDLE'
+}
+
+export const hasActivityOrderError = (robot: Robot): boolean => {
+  if (robot.activities.length % 2 === 0) {
+    return true
+  }
+  // @ts-expect-error - bad typing of reduce
+  return robot.activities.reduce((agg, a, i) => agg || isUnexpectedActivityOnIndex(a, i), false)
 }

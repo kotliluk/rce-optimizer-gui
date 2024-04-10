@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 
-import { IdleActivity, MovementActivity } from '../../../types/activity'
+import { MovementActivity } from '../../../types/activity'
 import { Translation } from '../../../logic/translation/translation'
 import { useMinMaxRangeValidator } from './useMinMaxRangeValidator'
 
 
 export const useMinMaxDurationValidator = (
-  a: MovementActivity | IdleActivity,
+  a: MovementActivity,
   ct: Translation['common'],
   t: Translation['cellDefPage']['robots']['activities'],
 ): [string | undefined, string | undefined, string | undefined] => {

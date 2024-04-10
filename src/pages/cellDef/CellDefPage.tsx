@@ -8,6 +8,7 @@ import { CellInfoForm } from '../../components/cellDefPage/cellInfoForm/CellInfo
 import { RobotsForm } from '../../components/cellDefPage/robotForm/RobotsForm'
 import { TimeOffsetsForm } from '../../components/cellDefPage/timeOffsetForm/TimeOffsetsForm'
 import { CollisionsForm } from '../../components/cellDefPage/collisionForm/CollisionsForm'
+import { CellDefControl } from '../../components/cellDefPage/cellDefControl/CellDefControl'
 
 
 export const CellDefPage = (): JSX.Element => {
@@ -20,6 +21,7 @@ export const CellDefPage = (): JSX.Element => {
       <RobotsForm />
       <TimeOffsetsForm />
       <CollisionsForm />
+      <CellDefControl />
     </main>
   )
 }

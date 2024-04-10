@@ -15,6 +15,7 @@ export interface State {
   collisions: Collision[]
   collisionsChecked: CheckState
   activities: ActivityShort[]
+  allChecked: string // "NO", "OK", or error type
 }
 
 export const initialState: State = {
@@ -32,4 +33,5 @@ export const initialState: State = {
   collisions: [],
   collisionsChecked: 'NO',
   activities: [],
+  allChecked: 'NO',
 }

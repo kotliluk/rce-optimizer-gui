@@ -7,7 +7,6 @@ import { formatPosition, Position } from '../../../types/position'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
-import { useMinMaxDurationValidator } from '../hooks/useMinMaxDurationValidator'
 
 
 interface ActivityFormProps {
@@ -17,11 +16,9 @@ interface ActivityFormProps {
 }
 
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
+  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, idError } = props
   const [opened, setOpened] = useState(true)
-
-  const [durationError, minDurationError, maxDurationError] = useMinMaxDurationValidator(activity, ct, t)
 
   const handleChange = useCallback((value: Partial<IdleActivity>) => {
     onChange({
@@ -37,14 +34,14 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
     })
   }, [activity])
 
-  const { id, position, minDuration, maxDuration, note } = activity
+  const { id, position, note } = activity
 
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} idle`}>
       <ActivityHeader
         bodyOpened={opened}
         openedTitle={`${t.idleActivityLabel} ${id}`}
-        closedTitle={`${t.idleActivityLabel} ${id} ${formatPosition(position)} (${minDuration}-${maxDuration} s)`}
+        closedTitle={`${t.idleActivityLabel} ${id} ${formatPosition(position)}`}
         setBodyOpened={setOpened}
       />
 
@@ -60,30 +57,6 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             errorMessage={idError}
           />
 
-          <Input
-            className='duration-input'
-            label={`${t.minDuration}: `}
-            type='number'
-            min={0}
-            value={minDuration}
-            onChange={minDuration => handleChange({ minDuration: parseFloat(minDuration) })}
-            invalid={durationError !== undefined || minDurationError !== undefined}
-            errorMessage={durationError ?? minDurationError}
-          />
-
-          <Input
-            className='duration-input'
-            label={`${t.maxDuration}: `}
-            type='number'
-            min={0}
-            value={maxDuration}
-            onChange={maxDuration => handleChange({ maxDuration: parseFloat(maxDuration) })}
-            invalid={durationError !== undefined || maxDurationError !== undefined}
-            errorMessage={durationError ?? maxDurationError}
-          />
-        </div>
-
-        <div className='form-row'>
           <div className='position-input'>
             <span className='__input-label'>{t.position}:&nbsp;</span>
             <Input
