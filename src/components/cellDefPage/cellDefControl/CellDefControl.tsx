@@ -11,14 +11,19 @@ import { selectTranslation } from '../../../redux/page/selector'
 import { createCellDefJSON } from '../../../types/cellDefJson'
 import { Button } from '../../atoms/button/Button'
 import { checkAll } from '../../../redux/cellDef/actions'
+import { heartBeat } from '../../../apollo/queries/heartBeat'
+import { useOptimizeMutation } from '../../../apollo/mutations/optimize'
 
 
 export const CellDefControl = (): JSX.Element => {
   const { cellDefPage: { cellDefControl: t } } = useSelector(selectTranslation)
   const thunkDispatch = useThunkDispatch()
+  const [optimizeMutation] = useOptimizeMutation()
 
-  const [cellDef, setCellDef] = useState<string | null>(null)
   const [checkError, setCheckError] = useState<string | undefined>(undefined)
+  const [heartBeatStatus, setHeartBeatStatus] = useState<boolean>(false)
+  const [optimizationStatus, setOptimizationStatus] = useState<string | null>(null)
+  const [optimizationResult, setOptimizationResult] = useState<string | null>(null)
 
   const allChecked = useSelector(selectAllChecked)
   const cellInfo = useSelector(selectCellInfo)
@@ -33,15 +38,10 @@ export const CellDefControl = (): JSX.Element => {
     thunkDispatch(checkAll())
   }, [allChecked, thunkDispatch])
 
-  const handleDownloadJSON = useCallback((cellDefArg: string | null) => {
-    let jsonStr = cellDefArg
-    if (cellDefArg === null) {
-      const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
-      jsonStr = JSON.stringify(json, null, 2)
-      setCellDef(jsonStr)
-    }
-
-    const blob = new Blob([jsonStr as string], { type: 'application/json' })
+  const handleDownloadJSON = useCallback(() => {
+    const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
+    const jsonStr = JSON.stringify(json)
+    const blob = new Blob([jsonStr], { type: 'application/json' })
     const href = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = href
@@ -50,7 +50,39 @@ export const CellDefControl = (): JSX.Element => {
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(href)
-  }, [])
+  }, [cellInfo, robots, offsets, collisions])
+
+  const handleSendToServer = useCallback(() => {
+    setOptimizationStatus(null)
+    setOptimizationResult(null)
+    const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
+    const jsonStr = JSON.stringify(json)
+    optimizeMutation({ variables: { cellName: cellInfo.name, cellDefJsonStr: jsonStr } })
+      .then(({ data }) => {
+        if (data) {
+          console.log(data.optimize.status)
+          setOptimizationStatus(data.optimize.status)
+          setOptimizationResult(data.optimize.output_filename)
+        } else {
+          const msg = 'ERROR_UNEXPECTED'
+          console.error(msg)
+          setOptimizationStatus(msg)
+        }
+      })
+      .catch((e) => {
+        const msg = `ERROR_UNEXPECTED: ${e}`
+        console.error(msg)
+        setOptimizationStatus(msg)
+      })
+  }, [cellInfo, robots, offsets, collisions, setOptimizationStatus, setOptimizationResult])
+
+  useEffect(() => {
+    heartBeat().then((status) => setHeartBeatStatus(status)).catch(console.error)
+    const iid = setInterval(() => {
+      heartBeat().then((status) => setHeartBeatStatus(status)).catch(console.error)
+    }, 15000)
+    return () => clearInterval(iid)
+  }, [setHeartBeatStatus])
 
   useEffect(() => {
     if (allChecked === 'errorRobotCheck') {
@@ -78,16 +110,36 @@ export const CellDefControl = (): JSX.Element => {
           onClick={handleCheckAll}
           errorMessage={checkError}
         >
-          1) {t.checkAll}
+          {t.checkAll}
         </Button>
 
         <Button
           className='text-btn'
-          onClick={() => handleDownloadJSON(cellDef)}
+          onClick={handleDownloadJSON}
           disabled={allChecked !== 'OK'}
         >
-          2) {t.downloadJSON}
+          {t.downloadJSON}
         </Button>
+
+        <Button
+          className='text-btn'
+          onClick={handleSendToServer}
+          disabled={allChecked !== 'OK' || !heartBeatStatus}
+          errorMessage={heartBeatStatus ? undefined : t.errorServerOffline}
+        >
+          {t.sendToServer}
+        </Button>
+      </div>
+      <div>
+        {optimizationStatus === 'OK' && (
+          <p>{t.optimizationOK}</p>
+        )}
+        {optimizationStatus !== null && optimizationStatus !== 'OK' && (
+          <p>{t.optimizationError}: {optimizationStatus}</p>
+        )}
+        {optimizationResult && (
+          <p>{t.optimizationResultSavedIn}: {optimizationResult}</p>
+        )}
       </div>
     </div>
   )

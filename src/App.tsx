@@ -9,8 +9,7 @@ import { selectTheme } from './redux/page/selector'
 import { CellDefPage } from './pages/cellDef/CellDefPage'
 
 
-// TODO - require OK robots before time offsets/collisions
-// TODO - connect to server API
+// TODO - check different start and end positions for Movements
 
 const App = (): JSX.Element => {
   const theme = useSelector(selectTheme)

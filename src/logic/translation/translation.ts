@@ -113,6 +113,10 @@ export interface Translation {
       errorCollisionsCheck: string,
       errorActivityOrder: string,
       errorMinDuration: string,
+      errorServerOffline: string,
+      optimizationOK: string,
+      optimizationError: string,
+      optimizationResultSavedIn: string,
     },
   }
 }

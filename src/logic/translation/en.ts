@@ -110,6 +110,10 @@ export const EN: Translation = {
       errorCollisionsCheck: 'Error in collisions',
       errorActivityOrder: 'Error in activities order in robot: ',
       errorMinDuration: 'Minimum activities duration is longer than cycle time in robot: ',
+      errorServerOffline: 'Cannot connect to the Optimization server',
+      optimizationOK: 'Optimization successful',
+      optimizationError: 'Optimization error',
+      optimizationResultSavedIn: 'Result saved in',
     },
   },
 }

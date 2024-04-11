@@ -110,6 +110,10 @@ export const CS: Translation = {
       errorCollisionsCheck: 'Chyba v kolizích',
       errorActivityOrder: 'Chyba v pořadí aktivit u robota: ',
       errorMinDuration: 'Minimální doba trvání aktivit je delší než cyklus buňky u robota: ',
+      errorServerOffline: 'Chyba připojení k optimalizačnímu serveru',
+      optimizationOK: 'Optimalizace byla úspěšná',
+      optimizationError: 'Chyba optimalizace',
+      optimizationResultSavedIn: 'Výsledek byl uložen do',
     },
   },
 }
