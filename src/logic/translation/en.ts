@@ -65,6 +65,7 @@ export const EN: Translation = {
         errorBothFixedUsedInMovement: 'Use "Work" to set both fixed times',
         errorNegativeDuration: 'Negative duration',
         errorNegativeFixedTime: 'Negative fixed time',
+        errorMovementWithSamePositions: 'Movement has same start and end positions',
       },
     },
     timeOffsets: {

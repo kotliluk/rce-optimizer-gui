@@ -21,7 +21,9 @@ import {
 } from './actions'
 import { hasActivityOrderError, newRobot } from '../../types/robot'
 import {
+  Activity,
   ActivityShort,
+  IdleActivity,
   getMinDuration,
   newIdleActivity,
   newMovementActivity,
@@ -31,6 +33,8 @@ import { getDuplicates } from '../../utils/array'
 import { newTimeOffset } from '../../types/timeOffset'
 import { newCollision } from '../../types/collision'
 import { isCollisionInvalid, isTimeOffsetInvalid, resetDetail, updateDetail } from './utils'
+import { equalPos } from '../../types/position'
+import { isDefNaN, isDefNaNOrNeg } from '../../utils/number'
 
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -137,10 +141,47 @@ export function reducer (state = initialState, action: Actions): State {
             return robot
           }
 
+          const isIdle = activity.type === 'IDLE'
+          const activities = robot.activities.map((a) => (a.uuid === activity.uuid) ? activity : a)
+          const aI = robot.activities.findIndex((a) => a.uuid === activity.uuid)
+          const count = activities.length
+          let equalPrev = false
+          let equalNext = false
+
+          if (isIdle) {
+            if (aI >= 2 && activities[aI - 1].type === 'MOVEMENT' && activities[aI - 2].type === 'IDLE') {
+              equalPrev = equalPos(
+                (activities[aI - 2] as IdleActivity).position,
+                (activities[aI] as IdleActivity).position,
+              )
+            }
+            if (aI < count - 2 && activities[aI + 1].type === 'MOVEMENT' && activities[aI + 2].type === 'IDLE') {
+              equalNext = equalPos(
+                (activities[aI + 2] as IdleActivity).position,
+                (activities[aI] as IdleActivity).position,
+              )
+            }
+          }
+
           return {
             ...robot,
-            activities: robot.activities
-              .map((a) => a.uuid === activity.uuid ? { ...activity, duplicatedId: false } : a),
+            activities: robot.activities.map((a, i) => {
+              const extra: Partial<IdleActivity> = {}
+              if (isIdle && i === aI - 2) {
+                extra.equalEndForMovement = equalPrev
+              }
+              if (isIdle && i === aI) {
+                extra.equalStartForMovement = equalPrev
+                extra.equalEndForMovement = equalNext
+              }
+              if (isIdle && i === aI + 2) {
+                extra.equalStartForMovement = equalNext
+              }
+              return ((a.uuid === activity.uuid)
+                ? { ...activity, ...extra, duplicatedId: false }
+                : { ...a, ...extra }
+              ) as Activity
+            }),
           }
         }),
         robotsChecked: 'NO',
@@ -160,12 +201,30 @@ export function reducer (state = initialState, action: Actions): State {
       const emptyActivityId = allActivities.find((a) => a.id === '')
       const duplicatedActivities = getDuplicates(allActivities, (a, b) => a.id !== '' && a.id === b.id)
         .map((a) => a.uuid)
+      let zeroDistMovement = false
+      let numberError = false
       const robots = state.robots.map((robot) => {
         const duplicatedRobotId = duplicatedRobots.includes(robot.uuid)
         let minActivitiesDuration = 0
         const activities = robot.activities.map((a) => {
           minActivitiesDuration += getMinDuration(a)
           const duplicatedActivityId = duplicatedActivities.includes(a.uuid)
+          if (a.type === 'IDLE' && (a.equalStartForMovement || a.equalEndForMovement)) {
+            zeroDistMovement = true
+          }
+          if (a.type === 'IDLE' && (isDefNaN(a.position.x) || isDefNaN(a.position.y) || isDefNaN(a.position.z))) {
+            numberError = true
+          }
+          if (a.type === 'MOVEMENT'
+            && (isDefNaNOrNeg(a.minDuration) || isDefNaNOrNeg(a.maxDuration)
+              || isDefNaNOrNeg(a.fixedStartTime) || isDefNaNOrNeg(a.fixedEndTime)
+            )
+          ) {
+            numberError = true
+          }
+          if (a.type === 'WORK' && (isDefNaNOrNeg(a.duration) || isDefNaNOrNeg(a.fixedStartTime))) {
+            numberError = true
+          }
           return {
             ...a,
             duplicatedId: duplicatedActivityId,
@@ -178,8 +237,8 @@ export function reducer (state = initialState, action: Actions): State {
           minActivitiesDuration,
         }
       })
-      const checked = (!emptyRobotId && duplicatedRobots.length === 0
-          && !emptyActivityId && duplicatedActivities.length === 0)
+      const checked = (!emptyRobotId && duplicatedRobots.length === 0 && !emptyActivityId && !numberError
+        && duplicatedActivities.length === 0 && !zeroDistMovement)
         ? 'OK'
         : 'ERROR'
       const activities: ActivityShort[] = checked === 'OK'

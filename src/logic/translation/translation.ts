@@ -68,6 +68,7 @@ export interface Translation {
         errorBothFixedUsedInMovement: string,
         errorNegativeDuration: string,
         errorNegativeFixedTime: string,
+        errorMovementWithSamePositions: string,
       },
     },
     timeOffsets: {

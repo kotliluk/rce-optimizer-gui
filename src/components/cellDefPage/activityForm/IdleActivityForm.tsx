@@ -7,6 +7,7 @@ import { formatPosition, Position } from '../../../types/position'
 import { useSelector } from '../../../redux/useSelector'
 import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
+import { isDefNaN } from '../../../utils/number'
 
 
 interface ActivityFormProps {
@@ -16,7 +17,7 @@ interface ActivityFormProps {
 }
 
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
-  const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
+  const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, idError } = props
   const [opened, setOpened] = useState(true)
 
@@ -35,6 +36,10 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
   }, [activity])
 
   const { id, position, note } = activity
+
+  const isXNaN = isDefNaN(position.x)
+  const isYNaN = isDefNaN(position.y)
+  const isZNaN = isDefNaN(position.z)
 
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} idle`}>
@@ -57,22 +62,28 @@ export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
             errorMessage={idError}
           />
 
-          <div className='position-input'>
+          <div className={'position-input'}>
             <span className='__input-label'>{t.position}:&nbsp;</span>
             <Input
               type='number'
               value={position.x}
               onChange={x => handlePositionChange({ x: parseFloat(x) })}
+              invalid={isXNaN || activity.equalStartForMovement || activity.equalEndForMovement}
+              errorMessage={isXNaN ? ct.errorRequired : t.errorMovementWithSamePositions}
             />
             <Input
               type='number'
               value={position.y}
               onChange={y => handlePositionChange({ y: parseFloat(y) })}
+              invalid={isYNaN || activity.equalStartForMovement || activity.equalEndForMovement}
+              errorMessage={isYNaN ? ct.errorRequired : t.errorMovementWithSamePositions}
             />
             <Input
               type='number'
               value={position.z}
               onChange={z => handlePositionChange({ z: parseFloat(z) })}
+              invalid={isZNaN || activity.equalStartForMovement || activity.equalEndForMovement}
+              errorMessage={isZNaN ? ct.errorRequired : t.errorMovementWithSamePositions}
             />
           </div>
         </div>

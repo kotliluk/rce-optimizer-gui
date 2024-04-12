@@ -13,6 +13,8 @@ type ActivityCommon<T extends string> = {
 
 export type IdleActivity = ActivityCommon<'IDLE'> & {
   position: Position,
+  equalStartForMovement: boolean,
+  equalEndForMovement: boolean,
 }
 
 export type MovementActivity = ActivityCommon<'MOVEMENT'> & {
@@ -44,6 +46,8 @@ export const newIdleActivity = (): IdleActivity => {
     note: '',
     position: { x: 0, y: 0, z: 0 },
     duplicatedId: false,
+    equalStartForMovement: true,
+    equalEndForMovement: true,
   }
 }
 

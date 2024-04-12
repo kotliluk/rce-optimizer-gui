@@ -65,6 +65,7 @@ export const CS: Translation = {
         errorBothFixedUsedInMovement: 'Použijte "Práci" pro nastavení obou fixních časů',
         errorNegativeDuration: 'Záporné trvání',
         errorNegativeFixedTime: 'Záporný fixní čas',
+        errorMovementWithSamePositions: 'Pohyb má stejnou startovní a koncovou pozici',
       },
     },
     timeOffsets: {

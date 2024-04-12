@@ -22,3 +22,10 @@ export const intOrDefaultParser = (defInt: number) => (str: string | null): numb
  * Returns whether the given value is defined (not undefined) and NaN.
  */
 export const isDefNaN = (v: number | undefined): boolean => v !== undefined && isNaN(v)
+
+export const isDefNaNOrNeg = (v: number | undefined): boolean => {
+  if (v === undefined) {
+    return false
+  }
+  return v < 0
+}

@@ -8,6 +8,7 @@ import { selectTranslation } from '../../../redux/page/selector'
 import { ActivityHeader } from './ActivityHeader'
 import { OptionalInput } from '../../atoms/input/OptionalInput'
 import { useNegativeDefNaNValidator } from '../hooks/useNegativeDefNaNValidator'
+import { isDefNaN } from '../../../utils/number'
 
 
 interface ActivityFormProps {
@@ -33,6 +34,9 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
   }, [activity])
 
   const { id, uuid, duration, fixedStartTime, note } = activity
+
+  const isDurNaN = isDefNaN(activity.duration)
+  const isDurNeg = (activity.duration < 0)
 
   return (
     <div className={`activity-form ${opened ? 'body-opened' : 'body-hidden'} work`}>
@@ -65,6 +69,8 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
             min={0}
             value={duration}
             onChange={duration => handleChange({ duration: parseFloat(duration) })}
+            invalid={isDurNaN || isDurNeg}
+            errorMessage={isDurNaN ? ct.errorRequired : (isDurNeg ? t.errorNegativeDuration : undefined)}
           />
         </div>
 

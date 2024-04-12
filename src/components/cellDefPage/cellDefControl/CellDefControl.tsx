@@ -40,7 +40,7 @@ export const CellDefControl = (): JSX.Element => {
 
   const handleDownloadJSON = useCallback(() => {
     const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
-    const jsonStr = JSON.stringify(json)
+    const jsonStr = JSON.stringify(json, null, 4)
     const blob = new Blob([jsonStr], { type: 'application/json' })
     const href = URL.createObjectURL(blob)
     const link = document.createElement('a')
