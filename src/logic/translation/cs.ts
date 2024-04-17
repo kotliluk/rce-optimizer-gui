@@ -28,6 +28,7 @@ export const CS: Translation = {
       name: 'Název',
       cycleTime: 'Doba taktu',
       note: 'Poznámka',
+      loadFromJSONBtn: 'Nahrát z JSON',
     },
     robots: {
       robotsLabel: 'Roboty',

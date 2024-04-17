@@ -28,6 +28,7 @@ export const EN: Translation = {
       name: 'Name',
       cycleTime: 'Cycle time',
       note: 'Note',
+      loadFromJSONBtn: 'Load from JSON',
     },
     robots: {
       robotsLabel: 'Robots',

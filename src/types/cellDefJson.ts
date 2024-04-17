@@ -1,10 +1,11 @@
+import { v4 as uuidV4 } from 'uuid'
+
 import { Position } from './position'
 import { CellInfo } from './cellInfo'
 import { Robot } from './robot'
 import { Collision } from './collision'
 import { TimeOffset } from './timeOffset'
-import { undefToNull } from '../utils/undefined'
-import { Activity } from './activity'
+import { Activity, IdleActivity, MovementActivity, WorkActivity } from './activity'
 
 
 export type MovementActivityJSON = {
@@ -32,9 +33,23 @@ const createMovementActivityJSON = (a: Activity, s: Activity, e: Activity): Move
     max_duration: a.maxDuration,
     start: s.position,
     end: e.position,
-    fixed_start_time: undefToNull(a.fixedStartTime),
-    fixed_end_time: undefToNull(a.fixedEndTime),
+    fixed_start_time: a.fixedStartTime ?? null,
+    fixed_end_time: a.fixedEndTime ?? null,
     payload_weight: 0,
+  }
+}
+
+const parseMovementActivityJSON = (a: MovementActivityJSON): MovementActivity => {
+  return {
+    uuid: uuidV4(),
+    type: 'MOVEMENT',
+    id: a.id,
+    note: a.note,
+    duplicatedId: false,
+    minDuration: a.min_duration,
+    maxDuration: a.max_duration,
+    fixedStartTime: a.fixed_start_time ?? undefined,
+    fixedEndTime: a.fixed_end_time ?? undefined,
   }
 }
 
@@ -60,8 +75,20 @@ const createWorkActivityJSON = (a: Activity, s: Activity, e: Activity): WorkActi
     duration: a.duration,
     start: s.position,
     end: e.position,
-    fixed_start_time: undefToNull(a.fixedStartTime),
-    fixed_end_time: undefToNull(a.fixedStartTime),
+    fixed_start_time: a.fixedStartTime ?? null,
+    fixed_end_time: a.fixedStartTime ?? null,
+  }
+}
+
+const parseWorkActivityJSON = (a: WorkActivityJSON): WorkActivity => {
+  return {
+    uuid: uuidV4(),
+    type: 'WORK',
+    id: a.id,
+    note: a.note,
+    duplicatedId: false,
+    duration: a.duration,
+    fixedStartTime: a.fixed_start_time ?? undefined,
   }
 }
 
@@ -86,6 +113,19 @@ const createIdleActivityJSON = (a: Activity): IdleActivityJSON => {
   }
 }
 
+const parseIdleActivityJSON = (a: IdleActivityJSON): IdleActivity => {
+  return {
+    uuid: uuidV4(),
+    type: 'IDLE',
+    id: a.id,
+    note: a.note,
+    duplicatedId: false,
+    position: a.position,
+    equalStartForMovement: false,
+    equalEndForMovement: false,
+  }
+}
+
 export type ActivityJSON = MovementActivityJSON | WorkActivityJSON | IdleActivityJSON
 
 const createActivityJSON = (prev: Activity, a: Activity, next: Activity): ActivityJSON => {
@@ -99,6 +139,16 @@ const createActivityJSON = (prev: Activity, a: Activity, next: Activity): Activi
     return createWorkActivityJSON(a, prev, next)
   }
   throw Error(`Unsupported order of Activities: ${prev.type}, ${a.type}, ${next.type}`)
+}
+
+const parseActivityJSON = (a: ActivityJSON): Activity => {
+  if (a.type === 'MOVEMENT') {
+    return parseMovementActivityJSON(a)
+  }
+  if (a.type === 'WORK') {
+    return parseWorkActivityJSON(a)
+  }
+  return parseIdleActivityJSON(a)
 }
 
 export type RobotJSON = {
@@ -131,6 +181,17 @@ const createRobotJSON = (robot: Robot): RobotJSON => {
   }
 }
 
+export const parseRobotJSON = (r: RobotJSON): Robot => {
+  return {
+    uuid: uuidV4(),
+    id: r.id,
+    note: r.note,
+    activities: r.activities.map(parseActivityJSON),
+    minActivitiesDuration: r.min_activities_duration,
+    duplicatedId: false,
+  }
+}
+
 export type TimeOffsetJSON = {
   a_id: string,
   b_id: string,
@@ -142,8 +203,46 @@ const createTimeOffsetJSON = (timeOffset: TimeOffset): TimeOffsetJSON => {
   return {
     a_id: timeOffset.aId,
     b_id: timeOffset.bId,
-    min_offset: undefToNull(timeOffset.minOffset),
-    max_offset: undefToNull(timeOffset.maxOffset),
+    min_offset: timeOffset.minOffset ?? null,
+    max_offset: timeOffset.maxOffset ?? null,
+  }
+}
+
+const findActivitiesDetails = (aId: string, bId: string, robots: Robot[]) => {
+  let aUuid = ''
+  let aRobotId = ''
+  let bUuid = ''
+  let bRobotId = ''
+
+  robots.forEach((r) => r.activities.forEach((a) => {
+    if (a.id === aId) {
+      aUuid = a.uuid
+      aRobotId = r.id
+    }
+    if (a.id === bId) {
+      bUuid = a.uuid
+      bRobotId = r.id
+    }
+  }))
+
+  return [aUuid, aRobotId, bUuid, bRobotId]
+}
+
+export const parseTimeOffsetJSON = (to: TimeOffsetJSON, robots: Robot[]): TimeOffset => {
+  const [aUuid, aRobotId, bUuid, bRobotId] = findActivitiesDetails(to.a_id, to.b_id, robots)
+
+  return {
+    uuid: uuidV4(),
+    aId: to.a_id,
+    aUuid,
+    aRobotId,
+    aText: `${aRobotId}: ${to.a_id}`,
+    bId: to.b_id,
+    bUuid,
+    bRobotId,
+    bText: `${bRobotId}: ${to.b_id}`,
+    minOffset: to.min_offset ?? undefined,
+    maxOffset: to.max_offset ?? undefined,
   }
 }
 
@@ -158,12 +257,31 @@ const createCollisionJSON = (collision: Collision): CollisionJSON => {
   return {
     a_id: collision.aId,
     b_id: collision.bId,
-    b_prev_skip_ratio: undefToNull(collision.bPrevSkipRatio),
-    b_next_skip_ratio: undefToNull(collision.bNextSkipRatio),
+    b_prev_skip_ratio: collision.bPrevSkipRatio ?? null,
+    b_next_skip_ratio: collision.bNextSkipRatio ?? null,
+  }
+}
+
+export const parseCollisionJSON = (c: CollisionJSON, robots: Robot[]): Collision => {
+  const [aUuid, aRobotId, bUuid, bRobotId] = findActivitiesDetails(c.a_id, c.b_id, robots)
+
+  return {
+    uuid: uuidV4(),
+    aId: c.a_id,
+    aUuid,
+    aRobotId,
+    aText: `${aRobotId}: ${c.a_id}`,
+    bId: c.b_id,
+    bUuid,
+    bRobotId,
+    bText: `${bRobotId}: ${c.b_id}`,
+    bPrevSkipRatio: c.b_prev_skip_ratio ?? undefined,
+    bNextSkipRatio: c.b_next_skip_ratio ?? undefined,
   }
 }
 
 export type CellDefJSON = {
+  name: string,
   cycle_time: number,
   note: string,
   robots: RobotJSON[],
@@ -178,6 +296,7 @@ export const createCellDefJSON = (
   collisions: Collision[],
 ): CellDefJSON => {
   return {
+    name: cellInfo.name,
     cycle_time: cellInfo.cycleTime,
     note: cellInfo.note,
     robots: robots.map(createRobotJSON),

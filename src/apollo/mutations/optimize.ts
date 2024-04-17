@@ -2,8 +2,8 @@ import { gql, MutationTuple, useMutation } from '@apollo/client'
 
 
 const OPTIMIZE_MUTATION = gql`
-  mutation Optimize($cellName: String!, $cellDefJsonStr: String!) {
-    optimize(cell_name: $cellName, cell_def: $cellDefJsonStr) {
+  mutation Optimize($cellDefJsonStr: String!) {
+    optimize(cell_def: $cellDefJsonStr) {
       status
       output_filename
     }
@@ -18,7 +18,6 @@ interface OptimizeData {
 }
 
 interface OptimizeVars {
-  cellName: string
   cellDefJsonStr: string
 }
 

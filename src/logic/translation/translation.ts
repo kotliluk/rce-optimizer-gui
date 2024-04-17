@@ -31,6 +31,7 @@ export interface Translation {
       name: string,
       cycleTime: string,
       note: string,
+      loadFromJSONBtn: string,
     },
     robots: {
       robotsLabel: string,

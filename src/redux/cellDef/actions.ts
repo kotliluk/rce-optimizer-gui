@@ -1,18 +1,19 @@
 import { Action } from 'redux'
 
+import { ThunkAction } from '../thunk'
 import { CellInfo } from '../../types/cellInfo'
 import { RobotInfo } from '../../types/robot'
 import { Activity } from '../../types/activity'
 import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
-import { ThunkAction } from '../thunk'
+import { CellDefJSON } from '../../types/cellDefJson'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
 | AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
 | AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo | CheckTimeOffsets
 | AddCollision | DeleteCollision | SetCollisionInfo | CheckCollisions
-| CheckExtra
+| CheckExtra | SetCellDef
 
 
 /** ******************* Set cell info *********************/
@@ -320,6 +321,39 @@ export const checkExtra = (): CheckExtra => {
 
 export const checkAll = (): ThunkAction => (dispatch) => {
   try {
+    dispatch(checkRobots())
+    dispatch(checkTimeOffsets())
+    dispatch(checkCollisions())
+    dispatch(checkExtra())
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+/** ******************* Set cell def *********************/
+
+export const SET_CELL_DEF = 'cellDef/SET_CELL_DEF'
+
+interface SetCellDef extends Action<typeof SET_CELL_DEF> {
+  payload: {
+    cellDef: CellDefJSON,
+  }
+}
+
+export const setCellDef = (cellDef: CellDefJSON): SetCellDef => {
+  return {
+    type: SET_CELL_DEF,
+    payload: {
+      cellDef,
+    },
+  }
+}
+
+/** ******************* Load from JSON *********************/
+
+export const loadFromJSON = (cellDefStr: string): ThunkAction => (dispatch) => {
+  try {
+    dispatch(setCellDef(JSON.parse(cellDefStr)))
     dispatch(checkRobots())
     dispatch(checkTimeOffsets())
     dispatch(checkCollisions())

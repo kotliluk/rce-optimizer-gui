@@ -14,6 +14,7 @@ import {
   DELETE_ROBOT,
   DELETE_TIME_OFFSET,
   SET_ACTIVITY_INFO,
+  SET_CELL_DEF,
   SET_CELL_INFO,
   SET_COLLISION_INFO,
   SET_ROBOT_INFO,
@@ -23,8 +24,8 @@ import { hasActivityOrderError, newRobot } from '../../types/robot'
 import {
   Activity,
   ActivityShort,
-  IdleActivity,
   getMinDuration,
+  IdleActivity,
   newIdleActivity,
   newMovementActivity,
   newWorkActivity,
@@ -35,6 +36,7 @@ import { newCollision } from '../../types/collision'
 import { isCollisionInvalid, isTimeOffsetInvalid, resetDetail, updateDetail } from './utils'
 import { equalPos } from '../../types/position'
 import { isDefNaN, isDefNaNOrNeg } from '../../utils/number'
+import { parseCollisionJSON, parseRobotJSON, parseTimeOffsetJSON } from '../../types/cellDefJson'
 
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -381,6 +383,27 @@ export function reducer (state = initialState, action: Actions): State {
       return {
         ...state,
         allChecked: 'OK',
+      }
+    }
+
+    case SET_CELL_DEF: {
+      const cellDef = action.payload.cellDef
+      const robots = cellDef.robots.map(parseRobotJSON)
+
+      return {
+        cellInfo: {
+          name: cellDef.name,
+          note: cellDef.note,
+          cycleTime: cellDef.cycle_time,
+        },
+        robots,
+        robotsChecked: 'NO',
+        timeOffsets: cellDef.time_offsets.map((to) => parseTimeOffsetJSON(to, robots)),
+        timeOffsetsChecked: 'NO',
+        collisions: cellDef.collisions.map((c) => parseCollisionJSON(c, robots)),
+        collisionsChecked: 'NO',
+        activities: [],
+        allChecked: 'NO',
       }
     }
 

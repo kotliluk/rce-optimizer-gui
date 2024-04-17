@@ -57,7 +57,7 @@ export const CellDefControl = (): JSX.Element => {
     setOptimizationResult(null)
     const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
     const jsonStr = JSON.stringify(json)
-    optimizeMutation({ variables: { cellName: cellInfo.name, cellDefJsonStr: jsonStr } })
+    optimizeMutation({ variables: { cellDefJsonStr: jsonStr } })
       .then(({ data }) => {
         if (data) {
           console.log(data.optimize.status)
