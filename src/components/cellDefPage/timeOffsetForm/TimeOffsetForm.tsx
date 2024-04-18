@@ -58,11 +58,16 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
     }))
   }, [timeOffset, allActivities])
 
-  const handleChange = useCallback((value: Partial<TimeOffset>) => {
-    dispatch(setTimeOffsetInfo({
-      ...timeOffset,
-      ...value,
-    }))
+  const handleOffsetChange = useCallback((value: string | undefined, type: 'MIN' | 'MAX') => {
+    const numValue = (value === undefined) ? undefined : parseFloat(value)
+    const newOffsetObj = { ...timeOffset }
+    const newValue = (numValue === undefined) ? undefined : ((numValue < 0) ? 0 : numValue)
+    if (type === 'MIN') {
+      newOffsetObj.minOffset = newValue
+    } else {
+      newOffsetObj.maxOffset = newValue
+    }
+    dispatch(setTimeOffsetInfo(newOffsetObj))
   }, [timeOffset])
 
   useEffect(() => {
@@ -129,7 +134,7 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
             type='number'
             label={`${t.minOffset}:`}
             value={timeOffset.minOffset}
-            onChange={(value) => handleChange({ minOffset: value === undefined ? undefined : parseFloat(value) })}
+            onChange={(value) => handleOffsetChange(value, 'MIN')}
             defaultDefinedValue={'0'}
             invalid={offsetError !== undefined || minOffsetError !== undefined}
             errorMessage={offsetError ?? minOffsetError}
@@ -140,7 +145,7 @@ export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
             type='number'
             label={`${t.maxOffset}:`}
             value={timeOffset.maxOffset}
-            onChange={(value) => handleChange({ maxOffset: value === undefined ? undefined : parseFloat(value) })}
+            onChange={(value) => handleOffsetChange(value, 'MAX')}
             defaultDefinedValue={'0'}
             invalid={offsetError !== undefined || maxOffsetError !== undefined}
             errorMessage={offsetError ?? maxOffsetError}
