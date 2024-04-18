@@ -59,11 +59,16 @@ export const CollisionForm = (props: CollisionFormProps): JSX.Element => {
     }))
   }, [collision, allActivities])
 
-  const handleChange = useCallback((value: Partial<Collision>) => {
-    dispatch(setCollisionInfo({
-      ...collision,
-      ...value,
-    }))
+  const handleRatioChange = useCallback((value: string | undefined, type: 'PREV' | 'NEXT') => {
+    const numValue = (value === undefined) ? undefined : parseFloat(value)
+    const newCollisionObj = { ...collision }
+    const newValue = (numValue === undefined) ? undefined : ((numValue < 0) ? 0 : ((numValue > 100) ? 100 : numValue))
+    if (type === 'PREV') {
+      newCollisionObj.bPrevSkipRatio = newValue
+    } else {
+      newCollisionObj.bNextSkipRatio = newValue
+    }
+    dispatch(setCollisionInfo(newCollisionObj))
   }, [collision])
 
   useEffect(() => {
@@ -132,7 +137,7 @@ export const CollisionForm = (props: CollisionFormProps): JSX.Element => {
             value={collision.bPrevSkipRatio}
             min={0}
             max={100}
-            onChange={(value) => handleChange({ bPrevSkipRatio: value === undefined ? undefined : parseFloat(value) })}
+            onChange={(value) => handleRatioChange(value, 'PREV')}
             defaultDefinedValue={'0'}
             invalid={bPrevError !== undefined}
             errorMessage={bPrevError}
@@ -145,7 +150,7 @@ export const CollisionForm = (props: CollisionFormProps): JSX.Element => {
             value={collision.bNextSkipRatio}
             min={0}
             max={100}
-            onChange={(value) => handleChange({ bNextSkipRatio: value === undefined ? undefined : parseFloat(value) })}
+            onChange={(value) => handleRatioChange(value, 'NEXT')}
             defaultDefinedValue={'0'}
             invalid={bNextError !== undefined}
             errorMessage={bNextError}
