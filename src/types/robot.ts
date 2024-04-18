@@ -37,6 +37,5 @@ export const hasActivityOrderError = (robot: Robot): boolean => {
   if (robot.activities.length % 2 === 0) {
     return true
   }
-  // @ts-expect-error - bad typing of reduce
   return robot.activities.reduce((agg, a, i) => agg || isUnexpectedActivityOnIndex(a, i), false)
 }
