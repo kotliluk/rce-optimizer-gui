@@ -389,6 +389,8 @@ export function reducer (state = initialState, action: Actions): State {
     case SET_CELL_DEF: {
       const cellDef = action.payload.cellDef
       const robots = cellDef.robots.map(parseRobotJSON)
+      const timeOffsets = cellDef.time_offsets ?? []
+      const collisions = cellDef.collisions ?? []
 
       return {
         cellInfo: {
@@ -398,9 +400,9 @@ export function reducer (state = initialState, action: Actions): State {
         },
         robots,
         robotsChecked: 'NO',
-        timeOffsets: cellDef.time_offsets.map((to) => parseTimeOffsetJSON(to, robots)),
+        timeOffsets: timeOffsets.map((to) => parseTimeOffsetJSON(to, robots)),
         timeOffsetsChecked: 'NO',
-        collisions: cellDef.collisions.map((c) => parseCollisionJSON(c, robots)),
+        collisions: collisions.map((c) => parseCollisionJSON(c, robots)),
         collisionsChecked: 'NO',
         activities: [],
         allChecked: 'NO',

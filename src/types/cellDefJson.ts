@@ -61,7 +61,6 @@ export type WorkActivityJSON = {
   start: Position,
   end: Position,
   fixed_start_time: number | null,
-  fixed_end_time: number | null,
 }
 
 const createWorkActivityJSON = (a: Activity, s: Activity, e: Activity): WorkActivityJSON => {
@@ -76,7 +75,6 @@ const createWorkActivityJSON = (a: Activity, s: Activity, e: Activity): WorkActi
     start: s.position,
     end: e.position,
     fixed_start_time: a.fixedStartTime ?? null,
-    fixed_end_time: a.fixedStartTime ?? null,
   }
 }
 
