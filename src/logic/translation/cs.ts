@@ -115,7 +115,7 @@ export const CS: Translation = {
       errorServerOffline: 'Chyba připojení k optimalizačnímu serveru',
       optimizationOK: 'Optimalizace byla úspěšná',
       optimizationError: 'Chyba optimalizace',
-      optimizationResultSavedIn: 'Výsledek byl uložen do',
+      ganttChart: 'Ganttův diagram',
     },
   },
 }

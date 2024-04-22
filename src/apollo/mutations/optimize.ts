@@ -5,7 +5,8 @@ const OPTIMIZE_MUTATION = gql`
   mutation Optimize($cellDefJsonStr: String!) {
     optimize(cell_def: $cellDefJsonStr) {
       status
-      output_filename
+      result_json
+      gantt
     }
   }
 `
@@ -13,7 +14,8 @@ const OPTIMIZE_MUTATION = gql`
 interface OptimizeData {
   optimize: {
     status: string,
-    output_filename: string | null,
+    result_json: string | null,
+    gantt: string | null,
   }
 }
 

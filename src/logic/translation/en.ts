@@ -115,7 +115,7 @@ export const EN: Translation = {
       errorServerOffline: 'Cannot connect to the Optimization server',
       optimizationOK: 'Optimization successful',
       optimizationError: 'Optimization error',
-      optimizationResultSavedIn: 'Result saved in',
+      ganttChart: 'Gantt Chart',
     },
   },
 }

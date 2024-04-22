@@ -302,3 +302,30 @@ export const createCellDefJSON = (
     collisions: collisions.map(createCollisionJSON),
   }
 }
+
+export type ResultEnergyProfileJSON = {
+  q: number,
+  c: number,
+}
+
+export type ResultActivityJSON = {
+  id: string,
+  type: 'IDLE' | 'MOVEMENT' | 'WORK',
+  start_time: number,
+  duration: number,
+  end_time: number,
+  energy: number,
+  energy_profile: ResultEnergyProfileJSON[],
+}
+
+export type ResultRobotJSON = {
+  id: string,
+  activities: ResultActivityJSON[],
+}
+
+export type ResultJSON = {
+  name: string,
+  cycle_time: number,
+  robots: ResultRobotJSON[],
+  energy: number,
+}

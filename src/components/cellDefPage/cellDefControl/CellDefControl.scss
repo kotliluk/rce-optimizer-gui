@@ -10,3 +10,13 @@
     border-top: 2px solid t($secondary-color);
   }
 }
+
+.cell-def-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .gantt-chart {
+    max-width: 100%;
+  }
+}

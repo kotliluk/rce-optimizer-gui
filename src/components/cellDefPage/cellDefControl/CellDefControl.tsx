@@ -13,6 +13,7 @@ import { Button } from '../../atoms/button/Button'
 import { checkAll } from '../../../redux/cellDef/actions'
 import { heartBeat } from '../../../apollo/queries/heartBeat'
 import { useOptimizeMutation } from '../../../apollo/mutations/optimize'
+import { CellDefResult } from './CellDefResult'
 
 
 export const CellDefControl = (): JSX.Element => {
@@ -24,6 +25,7 @@ export const CellDefControl = (): JSX.Element => {
   const [heartBeatStatus, setHeartBeatStatus] = useState<boolean>(false)
   const [optimizationStatus, setOptimizationStatus] = useState<string | null>(null)
   const [optimizationResult, setOptimizationResult] = useState<string | null>(null)
+  const [optimizationGantt, setOptimizationGantt] = useState<string | null>(null)
 
   const allChecked = useSelector(selectAllChecked)
   const cellInfo = useSelector(selectCellInfo)
@@ -55,14 +57,15 @@ export const CellDefControl = (): JSX.Element => {
   const handleSendToServer = useCallback(() => {
     setOptimizationStatus(null)
     setOptimizationResult(null)
+    setOptimizationGantt(null)
     const json = createCellDefJSON(cellInfo, robots, offsets, collisions)
     const jsonStr = JSON.stringify(json)
     optimizeMutation({ variables: { cellDefJsonStr: jsonStr } })
       .then(({ data }) => {
         if (data) {
-          console.log(data.optimize.status)
           setOptimizationStatus(data.optimize.status)
-          setOptimizationResult(data.optimize.output_filename)
+          setOptimizationResult(data.optimize.result_json)
+          setOptimizationGantt(data.optimize.gantt)
         } else {
           const msg = 'ERROR_UNEXPECTED'
           console.error(msg)
@@ -74,7 +77,7 @@ export const CellDefControl = (): JSX.Element => {
         console.error(msg)
         setOptimizationStatus(msg)
       })
-  }, [cellInfo, robots, offsets, collisions, setOptimizationStatus, setOptimizationResult])
+  }, [cellInfo, robots, offsets, collisions, setOptimizationStatus, setOptimizationResult, setOptimizationGantt])
 
   useEffect(() => {
     heartBeat().then((status) => setHeartBeatStatus(status)).catch(console.error)
@@ -130,17 +133,12 @@ export const CellDefControl = (): JSX.Element => {
           {t.sendToServer}
         </Button>
       </div>
-      <div>
-        {optimizationStatus === 'OK' && (
-          <p>{t.optimizationOK}</p>
-        )}
-        {optimizationStatus !== null && optimizationStatus !== 'OK' && (
-          <p>{t.optimizationError}: {optimizationStatus}</p>
-        )}
-        {optimizationResult && (
-          <p>{t.optimizationResultSavedIn}: {optimizationResult}</p>
-        )}
-      </div>
+
+      <CellDefResult
+        status={optimizationStatus}
+        result={optimizationResult}
+        ganttBase64={optimizationGantt}
+      />
     </div>
   )
 }

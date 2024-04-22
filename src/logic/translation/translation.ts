@@ -118,7 +118,7 @@ export interface Translation {
       errorServerOffline: string,
       optimizationOK: string,
       optimizationError: string,
-      optimizationResultSavedIn: string,
+      ganttChart: string,
     },
   }
 }
