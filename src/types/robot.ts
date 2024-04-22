@@ -20,9 +20,9 @@ export const newRobot = (): Robot => {
     id: '',
     note: '',
     activities: [
-      newIdleActivity(),
+      newIdleActivity(false, true),
       newMovementActivity(),
-      newIdleActivity(),
+      newIdleActivity(true, false),
     ],
     minActivitiesDuration: 0,
     duplicatedId: false,

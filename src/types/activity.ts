@@ -13,8 +13,8 @@ type ActivityCommon<T extends string> = {
 
 export type IdleActivity = ActivityCommon<'IDLE'> & {
   position: Position,
-  equalStartForMovement: boolean,
   equalEndForMovement: boolean,
+  equalStartForMovement: boolean,
 }
 
 export type MovementActivity = ActivityCommon<'MOVEMENT'> & {
@@ -38,7 +38,7 @@ export type ActivityShort = {
   text: string,
 }
 
-export const newIdleActivity = (): IdleActivity => {
+export const newIdleActivity = (equalEndForMovement = true, equalStartForMovement = true): IdleActivity => {
   return {
     uuid: uuidV4(),
     type: 'IDLE',
@@ -46,8 +46,8 @@ export const newIdleActivity = (): IdleActivity => {
     note: '',
     position: { x: 0, y: 0, z: 0 },
     duplicatedId: false,
-    equalStartForMovement: true,
-    equalEndForMovement: true,
+    equalEndForMovement,
+    equalStartForMovement,
   }
 }
 

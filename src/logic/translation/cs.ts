@@ -115,7 +115,10 @@ export const CS: Translation = {
       errorServerOffline: 'Chyba připojení k optimalizačnímu serveru',
       optimizationOK: 'Optimalizace byla úspěšná',
       optimizationError: 'Chyba optimalizace',
-      ganttChart: 'Ganttův diagram',
+      tableActivityColumn: 'Aktivity - robot',
+      tableDurationColumn: 'Optimální trvání (s)',
+      tableStartTimeColumn: 'Čas startu (s)',
+      tableEndTimeColumn: 'Čas konce (s)',
     },
   },
 }

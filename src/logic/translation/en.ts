@@ -115,7 +115,10 @@ export const EN: Translation = {
       errorServerOffline: 'Cannot connect to the Optimization server',
       optimizationOK: 'Optimization successful',
       optimizationError: 'Optimization error',
-      ganttChart: 'Gantt Chart',
+      tableActivityColumn: 'Activities - robot',
+      tableDurationColumn: 'Optimal duration (s)',
+      tableStartTimeColumn: 'Start time (s)',
+      tableEndTimeColumn: 'End time (s)',
     },
   },
 }

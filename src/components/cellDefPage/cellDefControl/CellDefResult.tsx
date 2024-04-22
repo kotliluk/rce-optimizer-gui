@@ -32,17 +32,35 @@ export const CellDefResult = (props: GanttChartProps): JSX.Element | null => {
         <p><span className="bold">{t.optimizationError}</span>: {status}</p>
       )}
       {resultObj && (
-        <p>TODO - parse a table</p>
+        <table className='result-table'>
+          <tbody>
+            {resultObj.robots.map((r) => (
+              <React.Fragment key={r.id}>
+                <tr className='robot-tr'>
+                  <th>{t.tableActivityColumn} {r.id}</th>
+                  <th>{t.tableDurationColumn}</th>
+                  <th>{t.tableStartTimeColumn}</th>
+                  <th>{t.tableEndTimeColumn}</th>
+                </tr>
+                {r.activities.map((a) => (
+                  <tr key={a.id} className='activity-tr'>
+                    <td><span className={`type-circle ${a.type}`} />{a.id}</td>
+                    <td>{a.duration}</td>
+                    <td>{a.start_time}</td>
+                    <td>{a.end_time}</td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
       )}
       {ganttBase64 && (
-        <>
-          <p className="bold">{t.ganttChart}</p>
-          <img
-            className='gantt-chart'
-            alt="Gantt Chart"
-            src={`data:image/jpeg;base64,${ganttBase64}`}
-          />
-        </>
+        <img
+          className='gantt-chart'
+          alt="Gantt Chart"
+          src={`data:image/jpeg;base64,${ganttBase64}`}
+        />
       )}
     </div>
   )

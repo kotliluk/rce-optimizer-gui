@@ -90,13 +90,18 @@ export function reducer (state = initialState, action: Actions): State {
 
     case ADD_ACTIVITY: {
       const robotUuid = action.payload.robotUuid
+      const prevActivities = state.robots.find((r) => r.uuid === robotUuid)?.activities as Activity[]
+      const lastActivity = (prevActivities[prevActivities.length - 1] as IdleActivity)
+      const last = lastActivity.position
+      const equal = (action.payload.type === 'MOVEMENT') && last.x === 0 && last.y === 0 && last.z === 0
+      const updatedLast = { ...lastActivity, equalStartForMovement: equal }
       const activity = (action.payload.type === 'MOVEMENT') ? newMovementActivity() : newWorkActivity()
-      const position = newIdleActivity()
+      const newLast = newIdleActivity(equal, false)
 
       return {
         ...state,
         robots: state.robots.map((r) => (r.uuid === robotUuid)
-          ? { ...r, activities: [...r.activities, activity, position] }
+          ? { ...r, activities: [...r.activities.slice(0, -1), updatedLast, activity, newLast] }
           : r
         ),
         robotsChecked: 'NO',
@@ -144,11 +149,14 @@ export function reducer (state = initialState, action: Actions): State {
           }
 
           const isIdle = activity.type === 'IDLE'
+          const isWork = activity.type === 'WORK'
+          const isMove = activity.type === 'MOVEMENT'
           const activities = robot.activities.map((a) => (a.uuid === activity.uuid) ? activity : a)
           const aI = robot.activities.findIndex((a) => a.uuid === activity.uuid)
           const count = activities.length
           let equalPrev = false
           let equalNext = false
+          let equalAround = false
 
           if (isIdle) {
             if (aI >= 2 && activities[aI - 1].type === 'MOVEMENT' && activities[aI - 2].type === 'IDLE') {
@@ -165,22 +173,48 @@ export function reducer (state = initialState, action: Actions): State {
             }
           }
 
+          if (isMove) {
+            equalAround = equalPos(
+              (activities[aI - 1] as IdleActivity).position,
+              (activities[aI + 1] as IdleActivity).position,
+            )
+          }
+
           return {
             ...robot,
             activities: robot.activities.map((a, i) => {
               const extra: Partial<IdleActivity> = {}
+              // updates movement positions equality - prev idle
               if (isIdle && i === aI - 2) {
-                extra.equalEndForMovement = equalPrev
-              }
-              if (isIdle && i === aI) {
                 extra.equalStartForMovement = equalPrev
-                extra.equalEndForMovement = equalNext
               }
-              if (isIdle && i === aI + 2) {
+              // updates movement positions equality - cur idle
+              if (isIdle && i === aI) {
+                extra.equalEndForMovement = equalPrev
                 extra.equalStartForMovement = equalNext
               }
+              // updates movement positions equality - next idle
+              if (isIdle && i === aI + 2) {
+                extra.equalEndForMovement = equalNext
+              }
+              // resets movement positions equality - prev work
+              if (isWork && i === aI - 1) {
+                extra.equalStartForMovement = false
+              }
+              // resets movement positions equality - next work
+              if (isWork && i === aI + 1) {
+                extra.equalEndForMovement = false
+              }
+              // resets movement positions equality - prev move
+              if (isMove && i === aI - 1) {
+                extra.equalStartForMovement = equalAround
+              }
+              // resets movement positions equality - next move
+              if (isMove && i === aI + 1) {
+                extra.equalEndForMovement = equalAround
+              }
               return ((a.uuid === activity.uuid)
-                ? { ...activity, ...extra, duplicatedId: false }
+                ? { ...activity, ...extra, duplicatedId: a.duplicatedId && a.id === activity.id }
                 : { ...a, ...extra }
               ) as Activity
             }),

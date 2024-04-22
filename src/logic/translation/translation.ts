@@ -118,7 +118,10 @@ export interface Translation {
       errorServerOffline: string,
       optimizationOK: string,
       optimizationError: string,
-      ganttChart: string,
+      tableActivityColumn: string,
+      tableDurationColumn: string,
+      tableStartTimeColumn: string,
+      tableEndTimeColumn: string,
     },
   }
 }
