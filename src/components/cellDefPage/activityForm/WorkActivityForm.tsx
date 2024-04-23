@@ -15,12 +15,13 @@ interface ActivityFormProps {
   activity: WorkActivity
   onChange: (activity: Activity) => void
   onDelete: (activityUuid: string) => void
+  onAddBefore: (type: 'MOVEMENT' | 'WORK', before: string) => void
   idError: string | undefined
 }
 
 export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
+  const { activity, onChange, onDelete, onAddBefore, idError } = props
   const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
-  const { activity, onChange, onDelete, idError } = props
   const [opened, setOpened] = useState(true)
   const [fixedStartError] = useNegativeDefNaNValidator(
     activity.fixedStartTime, ct.errorRequired, t.errorNegativeDuration,
@@ -45,8 +46,10 @@ export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
         openedTitle={`${t.workActivityLabel} ${id}`}
         closedTitle={`${t.workActivityLabel} ${id} (${duration} s)`}
         changeBtnLabel={t.changeToMovementActivity}
+        addBeforeBtnLabel={t.addMovementBeforeBtn}
         onChange={() => onChange(newMovementActivity(uuid))}
         onDelete={() => onDelete(uuid)}
+        onAddBefore={() => onAddBefore('MOVEMENT', uuid)}
         setBodyOpened={setOpened}
       />
 

@@ -1,7 +1,7 @@
 import { initialState, State } from './state'
 import {
   Actions,
-  ADD_ACTIVITY,
+  ADD_ACTIVITY_ON_INDEX,
   ADD_COLLISION,
   ADD_ROBOT,
   ADD_TIME_OFFSET,
@@ -21,15 +21,7 @@ import {
   SET_TIME_OFFSET_INFO,
 } from './actions'
 import { hasActivityOrderError, newRobot } from '../../types/robot'
-import {
-  Activity,
-  ActivityShort,
-  getMinDuration,
-  IdleActivity,
-  newIdleActivity,
-  newMovementActivity,
-  newWorkActivity,
-} from '../../types/activity'
+import { Activity, ActivityShort, getMinDuration, IdleActivity } from '../../types/activity'
 import { getDuplicates } from '../../utils/array'
 import { newTimeOffset } from '../../types/timeOffset'
 import { newCollision } from '../../types/collision'
@@ -88,20 +80,13 @@ export function reducer (state = initialState, action: Actions): State {
       }
     }
 
-    case ADD_ACTIVITY: {
-      const robotUuid = action.payload.robotUuid
-      const prevActivities = state.robots.find((r) => r.uuid === robotUuid)?.activities as Activity[]
-      const lastActivity = (prevActivities[prevActivities.length - 1] as IdleActivity)
-      const last = lastActivity.position
-      const equal = (action.payload.type === 'MOVEMENT') && last.x === 0 && last.y === 0 && last.z === 0
-      const updatedLast = { ...lastActivity, equalStartForMovement: equal }
-      const activity = (action.payload.type === 'MOVEMENT') ? newMovementActivity() : newWorkActivity()
-      const newLast = newIdleActivity(equal, false)
+    case ADD_ACTIVITY_ON_INDEX: {
+      const { robotUuid, activity, idle, index } = action.payload
 
       return {
         ...state,
         robots: state.robots.map((r) => (r.uuid === robotUuid)
-          ? { ...r, activities: [...r.activities.slice(0, -1), updatedLast, activity, newLast] }
+          ? { ...r, activities: [...r.activities.slice(0, index), activity, idle, ...r.activities.slice(index)] }
           : r
         ),
         robotsChecked: 'NO',

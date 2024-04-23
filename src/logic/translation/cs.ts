@@ -50,6 +50,7 @@ export const CS: Translation = {
         idleActivityLabel: 'Statická pozice',
         movementActivityLabel: 'Pohyb',
         workActivityLabel: 'Práce',
+        addMovementBeforeBtn: 'Přidat pohyb před',
         changeToMovementActivity: 'Změnit na pohyb',
         changeToWorkActivity: 'Změnit na práci',
         id: 'Id',

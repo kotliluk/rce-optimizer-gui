@@ -4,7 +4,7 @@ import React, { useCallback } from 'react'
 import './ActivitiesForm.scss'
 import { ActivityForm } from './ActivityForm'
 import { Button } from '../../atoms/button/Button'
-import { useDispatch } from '../../../redux/useDispatch'
+import { useDispatch, useThunkDispatch } from '../../../redux/useDispatch'
 import { addActivity, deleteActivity, setActivityInfo } from '../../../redux/cellDef/actions'
 import { Activity } from '../../../types/activity'
 import { useSelector } from '../../../redux/useSelector'
@@ -20,9 +20,10 @@ export const ActivitiesForm = (props: ActivitiesFormProps): JSX.Element => {
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { robotUuid, activities } = props
   const dispatch = useDispatch()
+  const thunkDispatch = useThunkDispatch()
 
-  const handleAddNewActivity = useCallback((type: 'MOVEMENT' | 'WORK') => {
-    dispatch(addActivity(robotUuid, type))
+  const handleAddNewActivity = useCallback((type: 'MOVEMENT' | 'WORK', before?: string) => {
+    thunkDispatch(addActivity(robotUuid, type, before))
   }, [robotUuid])
 
   const handleDeleteActivity = useCallback((activityUuid: string) => {
@@ -42,6 +43,7 @@ export const ActivitiesForm = (props: ActivitiesFormProps): JSX.Element => {
           activity={activity}
           onDelete={handleDeleteActivity}
           onChange={handleChangeActivity}
+          onAddBefore={handleAddNewActivity}
         />
       ))}
       <div className='btns-row'>

@@ -53,6 +53,7 @@ export interface Translation {
         idleActivityLabel: string,
         movementActivityLabel: string,
         workActivityLabel: string,
+        addMovementBeforeBtn: string,
         changeToMovementActivity: string,
         changeToWorkActivity: string,
         id: string,

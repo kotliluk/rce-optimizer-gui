@@ -11,17 +11,27 @@ interface ActivityHeaderProps {
   openedTitle: string
   closedTitle: string
   changeBtnLabel?: string
+  addBeforeBtnLabel?: string
   onChange?: () => void
   onDelete?: () => void
+  onAddBefore?: () => void
   setBodyOpened: (updater: (opened: boolean) => boolean) => void
 }
 
 export const ActivityHeader = (props: ActivityHeaderProps): JSX.Element => {
-  const { bodyOpened, openedTitle, closedTitle, changeBtnLabel, onChange, onDelete, setBodyOpened } = props
+  const {
+    bodyOpened, openedTitle, closedTitle, changeBtnLabel, addBeforeBtnLabel,
+    onChange, onDelete, onAddBefore, setBodyOpened,
+  } = props
 
   return (
     <div className='activity-form-header'>
       <span className='activity-form-title'>{bodyOpened ? openedTitle : closedTitle}</span>
+      {onAddBefore && (
+        <Button className='text-btn' onClick={() => onAddBefore()}>
+          {addBeforeBtnLabel ?? '+'}
+        </Button>
+      )}
       {onChange && (
         <Button className='text-btn' onClick={() => onChange()}>
           {changeBtnLabel ?? '<->'}

@@ -50,6 +50,7 @@ export const EN: Translation = {
         idleActivityLabel: 'Static position',
         movementActivityLabel: 'Movement',
         workActivityLabel: 'Work',
+        addMovementBeforeBtn: 'Add move before',
         changeToMovementActivity: 'Change to Move',
         changeToWorkActivity: 'Change to Work',
         id: 'Id',

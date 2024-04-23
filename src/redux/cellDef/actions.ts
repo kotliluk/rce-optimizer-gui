@@ -3,14 +3,22 @@ import { Action } from 'redux'
 import { ThunkAction } from '../thunk'
 import { CellInfo } from '../../types/cellInfo'
 import { RobotInfo } from '../../types/robot'
-import { Activity } from '../../types/activity'
+import {
+  Activity,
+  IdleActivity,
+  MovementActivity,
+  newIdleActivity,
+  newMovementActivity,
+  newWorkActivity,
+  WorkActivity,
+} from '../../types/activity'
 import { TimeOffset } from '../../types/timeOffset'
 import { Collision } from '../../types/collision'
 import { CellDefJSON } from '../../types/cellDefJson'
 
 
 export type Actions = SetCellInfo | AddRobot | DeleteRobot | SetRobotInfo
-| AddActivity | DeleteActivity | SetActivityInfo | CheckRobots
+| AddActivityOnIndex | DeleteActivity | SetActivityInfo | CheckRobots
 | AddTimeOffset | DeleteTimeOffset | SetTimeOffsetInfo | CheckTimeOffsets
 | AddCollision | DeleteCollision | SetCollisionInfo | CheckCollisions
 | CheckExtra | SetCellDef
@@ -88,23 +96,32 @@ export const setRobotInfo = (robotInfo: RobotInfo): SetRobotInfo => {
   }
 }
 
-/** ******************* Add activity *********************/
+/** ******************* Add activity before *********************/
 
-export const ADD_ACTIVITY = 'cellDef/ADD_ACTIVITY'
+export const ADD_ACTIVITY_ON_INDEX = 'cellDef/ADD_ACTIVITY_ON_INDEX'
 
-interface AddActivity extends Action<typeof ADD_ACTIVITY> {
+interface AddActivityOnIndex extends Action<typeof ADD_ACTIVITY_ON_INDEX> {
   payload: {
     robotUuid: string,
-    type: 'MOVEMENT' | 'WORK',
+    activity: WorkActivity | MovementActivity,
+    idle: IdleActivity,
+    index: number,
   }
 }
 
-export const addActivity = (robotUuid: string, type: 'MOVEMENT' | 'WORK'): AddActivity => {
+export const addActivityOnIndex = (
+  robotUuid: string,
+  activity: WorkActivity | MovementActivity,
+  idle: IdleActivity,
+  index: number,
+): AddActivityOnIndex => {
   return {
-    type: ADD_ACTIVITY,
+    type: ADD_ACTIVITY_ON_INDEX,
     payload: {
       robotUuid,
-      type,
+      activity,
+      idle,
+      index,
     },
   }
 }
@@ -148,6 +165,28 @@ export const setActivityInfo = (robotUuid: string, activity: Activity): SetActiv
       robotUuid,
       activity,
     },
+  }
+}
+
+/** ******************* Add activity *********************/
+
+export const addActivity = (
+  robotUuid: string,
+  type: 'MOVEMENT' | 'WORK',
+  before?: string,
+): ThunkAction => (dispatch, getState) => {
+  const activities = getState().cellDef.robots.find((r) => r.uuid === robotUuid)?.activities as Activity[]
+  const index = before === undefined ? activities.length : activities.findIndex((a) => a.uuid === before)
+  const prev = activities[index - 1]
+  const activity = (type === 'MOVEMENT') ? newMovementActivity() : newWorkActivity()
+  const idle = newIdleActivity()
+
+  try {
+    dispatch(addActivityOnIndex(robotUuid, activity, idle, index))
+    dispatch(setActivityInfo(robotUuid, prev))
+    dispatch(setActivityInfo(robotUuid, idle))
+  } catch (e) {
+    console.error(e)
   }
 }
 

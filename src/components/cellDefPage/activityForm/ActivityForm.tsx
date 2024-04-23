@@ -13,11 +13,12 @@ interface ActivityFormProps {
   activity: Activity
   onChange: (activity: Activity) => void
   onDelete: (activityUuid: string) => void
+  onAddBefore: (type: 'MOVEMENT' | 'WORK', before: string) => void
 }
 
 export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
+  const { activity, onChange, onDelete, onAddBefore } = props
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
-  const { activity, onChange, onDelete } = props
   const [idError, setIdError] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -46,6 +47,7 @@ export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
         activity={activity}
         onChange={onChange}
         onDelete={onDelete}
+        onAddBefore={onAddBefore}
         idError={idError}
       />
     )
@@ -57,6 +59,7 @@ export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
         activity={activity}
         onChange={onChange}
         onDelete={onDelete}
+        onAddBefore={onAddBefore}
         idError={idError}
       />
     )
