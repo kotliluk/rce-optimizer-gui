@@ -90,3 +90,20 @@ At the bottom of the page, you can check additional requirements by the "Check a
 button. When every check passes, you can download the definition of the cell as JSON.
 If the application is connected to the optimization server, you can send the definition
 directly to be optimized.
+
+## Project code
+
+The code of the project is structured as follows:
+
+* `./public/` - HTML page skeleton
+* `./src/apollo/` - GraphQL connection to the server
+* `./src/assets/` - images and SVG icons
+* `./src/components/` - React components
+* `./src/logic/` - cross-cutting logic, e.g., translation and local storage
+* `./src/pages/` - application pages (main React components for different URL routes)
+* `./src/redux/` - application state handled by Redux
+* `./src/styles/` - global styles using SCSS
+* `./src/types/` - TS type definitions
+* `./src/utils/` - util functions
+* `./src/App.txs` - application main component
+* `./src/index.tsx` - ReactDOM render script with framework providers
