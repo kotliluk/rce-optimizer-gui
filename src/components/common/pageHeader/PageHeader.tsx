@@ -6,11 +6,13 @@ import './PageHeader.scss'
 import { SettingsMenu } from '../settingsMenu/SettingsMenu'
 
 
+/**
+ * Page header with the Home link and settings menu.
+ */
 export const PageHeader = (): JSX.Element => {
   return (
     <header className='page-header'>
       <Link to={'/'} className='home-link'>
-        {/* <AppIcon className='logo' /> */}
         RCE Optimizer
       </Link>
 

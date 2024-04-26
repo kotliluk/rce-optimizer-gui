@@ -11,6 +11,9 @@ import { CollisionsForm } from '../../components/cellDefPage/collisionForm/Colli
 import { CellDefControl } from '../../components/cellDefPage/cellDefControl/CellDefControl'
 
 
+/**
+ * A page with the cell definition forms.
+ */
 export const CellDefPage = (): JSX.Element => {
   const { cellDefPage: t } = useSelector(selectTranslation)
 

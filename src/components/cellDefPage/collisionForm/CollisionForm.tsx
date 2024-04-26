@@ -19,6 +19,9 @@ interface CollisionFormProps {
   collision: Collision
 }
 
+/**
+ * A collision definition card.
+ */
 export const CollisionForm = (props: CollisionFormProps): JSX.Element => {
   const { collision } = props
   const { common: ct, cellDefPage: { collisions: t } } = useSelector(selectTranslation)

@@ -11,6 +11,9 @@ import { addTimeOffset, checkTimeOffsets } from '../../../redux/cellDef/actions'
 import { selectTranslation } from '../../../redux/page/selector'
 
 
+/**
+ * A list of time offsets defined in the cell.
+ */
 export const TimeOffsetsForm = (): JSX.Element => {
   const { cellDefPage: { timeOffsets: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()

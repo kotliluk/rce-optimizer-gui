@@ -5,10 +5,9 @@ import { LS_ACCESS } from './utils'
 import { getTranslation, Language } from '../../logic/translation'
 import { Translation } from '../../logic/translation/translation'
 import { State } from './state'
-import { ModalWindowType } from '../../types/modalWindowType'
 
 
-export type Actions = InitPage | SetTheme | SetTranslation | SetModalWindow
+export type Actions = InitPage | SetTheme | SetTranslation
 
 /** ******************* Init page state *********************/
 
@@ -22,7 +21,6 @@ export const initPage = (): InitPage => {
   const theme = LS_ACCESS.theme.get()
   const language = LS_ACCESS.language.get()
   const translation = getTranslation(language)
-  const modalWindow = LS_ACCESS.modalWindow.get()
 
   return {
     type: INIT_PAGE,
@@ -30,7 +28,6 @@ export const initPage = (): InitPage => {
       theme,
       language,
       translation,
-      modalWindow,
     },
   }
 }
@@ -76,27 +73,6 @@ export const setTranslation = (language: Language): SetTranslation => {
     payload: {
       language,
       translation,
-    },
-  }
-}
-
-/** ******************* Set modal window *********************/
-
-export const SET_MODAL_WINDOW = 'page/SET_MODAL_WINDOW'
-
-interface SetModalWindow extends Action<typeof SET_MODAL_WINDOW> {
-  payload: {
-    modalWindow: ModalWindowType,
-  }
-}
-
-export const setModalWindow = (modalWindow: ModalWindowType): SetModalWindow => {
-  LS_ACCESS.modalWindow.set(modalWindow)
-
-  return {
-    type: SET_MODAL_WINDOW,
-    payload: {
-      modalWindow,
     },
   }
 }

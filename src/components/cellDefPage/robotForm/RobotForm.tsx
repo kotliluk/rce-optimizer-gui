@@ -17,6 +17,9 @@ interface RobotFormProps {
   robot: Robot
 }
 
+/**
+ * A robot definition card.
+ */
 export const RobotForm = (props: RobotFormProps): JSX.Element => {
   const { cellDefPage: { robots: t } } = useSelector(selectTranslation)
   const { robot: { activities, ...robotInfo } } = props

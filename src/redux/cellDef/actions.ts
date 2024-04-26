@@ -1,6 +1,6 @@
 import { Action } from 'redux'
 
-import { ThunkAction } from '../thunk'
+import { AppThunkAction } from '../thunk'
 import { CellInfo } from '../../types/cellInfo'
 import { RobotInfo } from '../../types/robot'
 import {
@@ -174,7 +174,7 @@ export const addActivity = (
   robotUuid: string,
   type: 'MOVEMENT' | 'WORK',
   before?: string,
-): ThunkAction => (dispatch, getState) => {
+): AppThunkAction => (dispatch, getState) => {
   const activities = getState().cellDef.robots.find((r) => r.uuid === robotUuid)?.activities as Activity[]
   const index = before === undefined ? activities.length : activities.findIndex((a) => a.uuid === before)
   const prev = activities[index - 1]
@@ -358,7 +358,7 @@ export const checkExtra = (): CheckExtra => {
 
 /** ******************* Check all *********************/
 
-export const checkAll = (): ThunkAction => (dispatch) => {
+export const checkAll = (): AppThunkAction => (dispatch) => {
   try {
     dispatch(checkRobots())
     dispatch(checkTimeOffsets())
@@ -390,7 +390,7 @@ export const setCellDef = (cellDef: CellDefJSON): SetCellDef => {
 
 /** ******************* Load from JSON *********************/
 
-export const loadFromJSON = (cellDefStr: string): ThunkAction => (dispatch) => {
+export const loadFromJSON = (cellDefStr: string): AppThunkAction => (dispatch) => {
   try {
     dispatch(setCellDef(JSON.parse(cellDefStr)))
     dispatch(checkRobots())

@@ -8,4 +8,4 @@ import { RootState } from './state'
 
 
 export type AppThunkDispatch = ReduxThunkDispatch<RootState, unknown, Actions>
-export type ThunkAction<T = void> = ReduxThunkAction<T, RootState, unknown, Actions>
+export type AppThunkAction<T = void> = ReduxThunkAction<T, RootState, unknown, Actions>

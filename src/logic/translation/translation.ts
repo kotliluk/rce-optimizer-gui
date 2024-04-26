@@ -1,9 +1,9 @@
-/**
- * App translation.
- */
 import { Language } from './index'
 
 
+/**
+ * App translation.
+ */
 export interface Translation {
   language: string
   languageShort: Language

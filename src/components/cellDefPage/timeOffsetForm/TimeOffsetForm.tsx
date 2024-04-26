@@ -19,6 +19,9 @@ interface TimeOffsetFormProps {
   timeOffset: TimeOffset
 }
 
+/**
+ * A time offset definition card.
+ */
 export const TimeOffsetForm = (props: TimeOffsetFormProps): JSX.Element => {
   const { timeOffset } = props
   const { common: ct, cellDefPage: { timeOffsets: t } } = useSelector(selectTranslation)

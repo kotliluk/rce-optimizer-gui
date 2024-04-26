@@ -7,7 +7,6 @@ import { ApolloProvider } from '@apollo/client'
 import './styles/global.scss'
 import { store } from './redux/store'
 import App from './App'
-import { ModalContainer } from './components/common/modal/modalContainer/ModalContainer'
 import { client } from './apollo/client'
 
 
@@ -17,7 +16,6 @@ ReactDOM.render(
       <ReduxProvider store={store}>
         <BrowserRouter>
           <App />
-          <ModalContainer />
         </BrowserRouter>
       </ReduxProvider>
     </ApolloProvider>

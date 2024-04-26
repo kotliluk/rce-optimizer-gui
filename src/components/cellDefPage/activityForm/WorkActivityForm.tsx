@@ -19,6 +19,9 @@ interface ActivityFormProps {
   idError: string | undefined
 }
 
+/**
+ * A work activity definition card.
+ */
 export const WorkActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { activity, onChange, onDelete, onAddBefore, idError } = props
   const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)

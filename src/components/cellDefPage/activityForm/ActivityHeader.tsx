@@ -18,6 +18,9 @@ interface ActivityHeaderProps {
   setBodyOpened: (updater: (opened: boolean) => boolean) => void
 }
 
+/**
+ * Header of an activity card with a title and common buttons.
+ */
 export const ActivityHeader = (props: ActivityHeaderProps): JSX.Element => {
   const {
     bodyOpened, openedTitle, closedTitle, changeBtnLabel, addBeforeBtnLabel,

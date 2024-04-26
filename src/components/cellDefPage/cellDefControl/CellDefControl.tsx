@@ -15,7 +15,9 @@ import { heartBeat } from '../../../apollo/queries/heartBeat'
 import { useOptimizeMutation } from '../../../apollo/mutations/optimize'
 import { CellDefResult } from './CellDefResult'
 
-
+/**
+ * Control buttons of the cell definition. Displays an optimization result if available.
+ */
 export const CellDefControl = (): JSX.Element => {
   const { cellDefPage: { cellDefControl: t } } = useSelector(selectTranslation)
   const thunkDispatch = useThunkDispatch()

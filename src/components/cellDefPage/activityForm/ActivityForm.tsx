@@ -16,6 +16,9 @@ interface ActivityFormProps {
   onAddBefore: (type: 'MOVEMENT' | 'WORK', before: string) => void
 }
 
+/**
+ * An activity definition card.
+ */
 export const ActivityForm = (props: ActivityFormProps): JSX.Element | null => {
   const { activity, onChange, onDelete, onAddBefore } = props
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)

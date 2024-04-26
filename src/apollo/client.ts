@@ -8,6 +8,9 @@ const httpLink = new HttpLink({
   uri: GRAPHQL_HTTP,
 })
 
+/**
+ * Apollo GraphQL client.
+ */
 export const client = new ApolloClient({
   link: httpLink,
   cache: new InMemoryCache({ addTypename: false }),

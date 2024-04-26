@@ -21,9 +21,3 @@ export const getTranslation = (lang: Language): Translation => {
 export const getAllTranslations = (): Translation[] => {
   return [EN, CS]
 }
-
-export const insertWords = (translation: string, ...words: (string | number)[]): string => {
-  return words
-    .map(word => word.toString())
-    .reduce((transl, word, i) => transl.replace(`__{${i + 1}}__`, word), translation)
-}

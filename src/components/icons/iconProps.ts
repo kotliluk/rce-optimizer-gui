@@ -7,8 +7,3 @@ export interface IconProps {
 export interface IconPropsWithFill extends IconProps {
   fill?: string
 }
-
-export interface IconPropsWithStroke extends IconPropsWithFill {
-  stroke?: string
-  'stroke-width'?: number
-}

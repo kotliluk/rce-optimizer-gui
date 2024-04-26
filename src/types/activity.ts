@@ -77,6 +77,9 @@ export const newWorkActivity = (uuid?: string): WorkActivity => {
   }
 }
 
+/**
+ * Returns the minimal possible duration of the action.
+ */
 export const getMinDuration = (a: Activity): number => {
   if (a.type === 'IDLE') {
     return 0

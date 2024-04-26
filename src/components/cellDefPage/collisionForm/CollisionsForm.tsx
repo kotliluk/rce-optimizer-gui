@@ -11,6 +11,9 @@ import { addCollision, checkCollisions } from '../../../redux/cellDef/actions'
 import { selectTranslation } from '../../../redux/page/selector'
 
 
+/**
+ * A list of collisions defined in the cell.
+ */
 export const CollisionsForm = (): JSX.Element => {
   const { cellDefPage: { collisions: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()

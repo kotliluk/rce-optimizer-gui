@@ -13,6 +13,9 @@ interface HeartBeatData {
   heartBeat: boolean
 }
 
+/**
+ * Query of the server heat-beat. Returns true if the server is available, false otherwise.
+ */
 export const heartBeat = async (): Promise<boolean> => {
   try {
     const res = await client.query<HeartBeatData, {}>({ query: HEARTBEAT_QUERY })

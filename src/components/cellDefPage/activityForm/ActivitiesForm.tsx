@@ -16,6 +16,9 @@ interface ActivitiesFormProps {
   activities: Activity[]
 }
 
+/**
+ * A list of activities defined for a robot.
+ */
 export const ActivitiesForm = (props: ActivitiesFormProps): JSX.Element => {
   const { cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { robotUuid, activities } = props

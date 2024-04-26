@@ -3,6 +3,9 @@ export type File = {
   text: string | null,
 }
 
+/**
+ * Opens a file using a browser open-file dialog window.
+ */
 export const openFile = async (accept = '*'): Promise<File> => {
   return await new Promise<File>(resolve => {
     const element = document.createElement('div')

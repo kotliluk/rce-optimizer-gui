@@ -13,7 +13,9 @@ import { isDefNaN } from '../../../utils/number'
 import { Button } from '../../atoms/button/Button'
 import { openFile } from '../../../utils/file'
 
-
+/**
+ * Definition of overall information about the cell.
+ */
 export const CellInfoForm = (): JSX.Element => {
   const { common: ct, cellDefPage: { cellInfo: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()

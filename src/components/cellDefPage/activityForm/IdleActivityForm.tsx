@@ -16,6 +16,9 @@ interface ActivityFormProps {
   idError: string | undefined
 }
 
+/**
+ * An idle activity definition card.
+ */
 export const IdleActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
   const { activity, onChange, idError } = props

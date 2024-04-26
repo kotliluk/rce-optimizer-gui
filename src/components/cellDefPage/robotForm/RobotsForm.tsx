@@ -11,6 +11,9 @@ import { addRobot, checkRobots } from '../../../redux/cellDef/actions'
 import { selectTranslation } from '../../../redux/page/selector'
 
 
+/**
+ * A list of robots defined in the cell.
+ */
 export const RobotsForm = (): JSX.Element => {
   const { cellDefPage: { robots: t } } = useSelector(selectTranslation)
   const dispatch = useDispatch()

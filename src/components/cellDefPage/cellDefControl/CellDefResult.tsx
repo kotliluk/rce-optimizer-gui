@@ -13,6 +13,9 @@ interface GanttChartProps {
   ganttBase64: string | null
 }
 
+/**
+ * The optimization result with a formatted table and a Gantt chart.
+ */
 export const CellDefResult = (props: GanttChartProps): JSX.Element | null => {
   const { status, result, ganttBase64 } = props
   const { cellDefPage: { cellDefControl: t } } = useSelector(selectTranslation)

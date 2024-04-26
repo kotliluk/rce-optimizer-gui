@@ -3,6 +3,11 @@ import { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { isDefNaN } from '../../../utils/number'
 
 
+/**
+ * Creates a hook which validates the given value.
+ * It validates that the value is not NaN and is non-negative. Undefined value is valid.
+ * The hook returns string or undefined error and its setter.
+ */
 export const useNegativeDefNaNValidator = (
   value: number | undefined,
   errorRequired: string,

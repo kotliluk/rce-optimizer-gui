@@ -5,6 +5,12 @@ import { isDefNaN } from '../../../utils/number'
 
 type Setter = Dispatch<SetStateAction<string | undefined>>
 
+/**
+ * Creates a hook which validates min and max values.
+ * It validates that the values are not NaN and that min < max. Undefined values are valid.
+ * The hook returns 3 string or undefined values: min-max offset error, min offset error, max offset error.
+ * Further, it returns a setter for each value.
+ */
 export const useMinMaxRangeValidator = (
   min: number | undefined,
   max: number | undefined,

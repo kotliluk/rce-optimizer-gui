@@ -23,6 +23,9 @@ interface OptimizeVars {
   cellDefJsonStr: string
 }
 
+/**
+ * Optimization mutation. Sends the input to the server and returns the optimization result.
+ */
 export const useOptimizeMutation = (): MutationTuple<OptimizeData, OptimizeVars> => {
   return useMutation<OptimizeData, OptimizeVars>(OPTIMIZE_MUTATION)
 }

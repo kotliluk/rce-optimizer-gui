@@ -14,6 +14,9 @@ import { MenuOpened } from '../../icons/MenuOpened'
 import { MenuClosed } from '../../icons/MenuClosed'
 
 
+/**
+ * A pop-up settings menu.
+ */
 export const SettingsMenu = (): JSX.Element => {
   const translation = useSelector(selectTranslation)
   const theme = useSelector(selectTheme)
@@ -55,7 +58,7 @@ export const SettingsMenu = (): JSX.Element => {
 
         <div className='info'>
           <span className='author'>
-            Lukáš Kotlík, © {new Date().getFullYear()}
+            Lukáš Kotlík
           </span>
           <a
             className='github-link'

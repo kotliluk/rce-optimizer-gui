@@ -7,6 +7,9 @@ import { useSelector } from '../../redux/useSelector'
 import { selectTranslation } from '../../redux/page/selector'
 
 
+/**
+ * The main page of the app with links to other pages.
+ */
 export const MainPage = (): JSX.Element => {
   const { mainPage: t } = useSelector(selectTranslation)
 

@@ -8,6 +8,9 @@ import { reducer as pageReducer } from './page/reducer'
 import { initPage } from './page/actions'
 
 
+/**
+ * Redux store of the application.
+ */
 export const store: Store<RootState, Actions> = configureStore({
   reducer: combineReducers({
     cellDef: cellDefReducer,

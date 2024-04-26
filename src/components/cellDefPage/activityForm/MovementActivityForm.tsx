@@ -19,6 +19,9 @@ interface ActivityFormProps {
   idError: string | undefined
 }
 
+/**
+ * A movement activity definition card.
+ */
 export const MovementActivityForm = (props: ActivityFormProps): JSX.Element => {
   const { activity, onChange, onDelete, onAddBefore, idError } = props
   const { common: ct, cellDefPage: { robots: { activities: t } } } = useSelector(selectTranslation)
