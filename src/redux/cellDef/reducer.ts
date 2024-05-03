@@ -237,7 +237,7 @@ export function reducer (state = initialState, action: Actions): State {
             numberError = true
           }
           if (a.type === 'MOVEMENT'
-            && (isDefNaNOrNeg(a.minDuration) || isDefNaNOrNeg(a.maxDuration)
+            && (isDefNaNOrNeg(a.minDuration) || isDefNaNOrNeg(a.maxDuration) || a.minDuration > a.maxDuration
               || isDefNaNOrNeg(a.fixedStartTime) || isDefNaNOrNeg(a.fixedEndTime)
             )
           ) {
